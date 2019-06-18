@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br>
+<head>
+  <style>
+  table {
+      width: 100%;
+  }
+  th,td {
+
+      word-wrap: break-word;
+  }
+
+  </style>
+<style>
+body {
+  background-image: url("mosca_logo.png");
+}
+</style>
+</head>
+<div class="jumbotron text-left" >
+<body>
+
+
+<div align='center'>
+  <h1>MOSCA pipeline </h1>
+  <small>Welcome {{session.username}}</small>
+</div>
+
+  <p></p>
+  <p><a class = "btn btn-success" href="/add_article"> Add Project</a>
+    <!--<a class = "btn btn-success" href="/upload_files"> File Upload</a>-->
+  </p>
+  <hr>
+
+
+  <table  class="table table-striped">
+    <tr>
+      <th>ID</th>
+      <th>Project</th>
+      <th>Description</th>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    {% for project in projects %}
+      <tr>
+        <td>{{project.id}}</td>
+        <td>{{project.tags}}</td>
+        <td>{{project.description}}</td>
+        <td>{{project.date}}</td>
+        <td><a href="run_mosca/{{project.id}}" class="btn btn-success pull-right">Run MOSCA</a></td>
+
+        <td><a href="add_data/{{project.id}}" class="btn btn-success pull-right">Add Data</a></td>
+
+        <td><a href="edit_article/{{project.id}}" class="btn btn-danger pull-right">Edit</a></td>
+
+        <td><form action="{{url_for('delete_article', id=project.id)}}" method="post">
+          <input type="hidden" name="method" value="DELETE">
+          <input type="submit" value="Delete" class="btn btn-danger">
+        </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  </body>
+  </div>
+{% endblock %}

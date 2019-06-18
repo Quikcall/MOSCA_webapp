@@ -1,0 +1,41 @@
+'''
+    if mg_sample1 and not mt_sample2:
+        if mg_sample2 and not mt_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, mg_path +'/'+ mg_sample2, mg_description,None, None, None, mt_description, s_id))
+        elif not mg_sample2 and not mt_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, None, mg_description,None, None, None, mt_description, s_id))
+
+    elif mt_sample1 and not mg_sample1:
+        if mt_sample2 and not mg_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,None, None, None, mg_description,mt_path, mt_path +'/'+ mt_sample1, mt_path +'/'+ mt_sample2, mt_description, s_id))
+        elif not mt_sample2 and not mg_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,None, None, None, mg_description,mt_path, mt_path +'/'+ mt_sample1, None, mt_description, s_id))
+
+    elif mg_sample1 and mg_sample1:
+        if mg_sample2 and not mt_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, mg_path +'/'+ mg_sample2, mg_description,mt_path, mt_path +'/'+ mt_sample1, None, mt_description, s_id))
+        elif mt_sample2 and not mg_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, None, mg_description,mt_path, mt_path +'/'+ mt_sample1, mt_path +'/'+ mt_sample2, mt_description, s_id))
+        elif not mg_sample2 and not mt_sample2:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, None, mg_description,mt_path, mt_path +'/'+ mt_sample1, None, mt_description, s_id))
+        else:
+            cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, mg_path +'/'+ mg_sample2, mg_description,mt_path, mt_path +'/'+ mt_sample1, mt_path +'/'+ mt_sample2, mt_description, s_id))'''
+
+
+    cur.execute('UPDATE samples SET samples_name=%s, samples_condition=%s, mg_path =%s, mg_sample1=%s, mg_sample2=%s, mg_description=%s, mt_path=%s, mt_sample1=%s, mt_sample2=%s, mt_description=%s WHERE id=%s',(samples_name,samples_condition,mg_path, mg_path +'/'+ mg_sample1, mg_path +'/'+ mg_sample2, mg_description,mt_path, mt_path +'/'+ mt_sample1, mt_path +'/'+ mt_sample2, mt_description, s_id))
+    if request.method == 'POST' and form.validate():
+        samples2 = form.samples_list.data
+
+
+
+
+        #execute
+
+        cur.execute('INSERT INTO exe_projects(id,s_id) VALUES(%s,%s)',(samples2['id'],samples2['s_id']))
+        #commit to db
+        mysql.connection.commit()
+        #close connection
+        cur.close()
+
+
+        return redirect(request.url)

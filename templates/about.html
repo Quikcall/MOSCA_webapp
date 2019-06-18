@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br>
+  <h1>About us</h1>
+  <p> MOSCA1 was developed in Python 3 and was tested in an Ubuntu server
+16.04. MOSCA is fully automated to do a complete analysis of raw files gener-
+ated by NGS (from MG and MT experiments), using the default parameters and
+
+tools. Nevertheless, the user can choose at the beginning between different as-
+semblers and can also select the database used for the annotation step. MOSCA
+
+performs the complete bioinformatics analysis of MG and MT experiments. It
+includes the following major steps that run sequentially: preprocessing, assembly,
+annotation and differential gene expression between multiple samples.</p>
+  <p>MOSCA has been designed to work in a Unix system, and requires a minimum of
+10Gb of RAM, since the assemblers integrated in the workflow, MetaSPAdes
+and Megahit, spend approximately 30Gb and 10Gb of RAM, respectively. All
+integrated software has to be previously installed, and their directories specified.</p>
+{% endblock %}

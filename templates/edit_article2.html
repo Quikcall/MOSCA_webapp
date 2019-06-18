@@ -1,0 +1,54 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-left">
+<br>
+<h1>MOSCA Parameters</h1>
+{% from "includes/_formhelpers.html" import render_field %}
+<form method="POST" action="">
+<div class="form-group">
+  {{ render_field(form.project_name, class_="form-control", id='Project Name') }}
+</div>
+<div class="form-group">
+  {{ render_field(form.description, class_="form-control", id = 'editor') }}
+</div>
+
+<p></p>
+<span class="input-group-text mb-3" id="input1">Metagenomic Samples</span>
+<div >
+  {{render_field(form.mg_sample1)}}
+  {{render_field(form.mg_sample2) }}
+</div>
+<p></p>
+<div class="form-group">
+  {{ render_field(form.mg_description, class_="form-control", id = 'editor') }}
+</div>
+
+<p></p>
+<span class="input-group-text mb-3" id="input1">Metatranscriptomics Samples</span>
+<div class="input-default-wrapper mt-3">
+  {{render_field(form.mt_sample1)}}
+  {{render_field(form.mt_sample2) }}
+</div>
+<p></p>
+<div class="form-group">
+  {{ render_field(form.mt_description, class_="form-control", id = 'editor') }}
+</div>
+<div class="form-group">
+  {{ render_field(form.adapters, class_="form-control") }}
+</div>
+<div class="form-group">
+  {{ render_field(form.output_dir, class_="form-control") }}
+  <!--<input type="file" id="ctrl" webkitdirectory directory multiple/-->
+
+</div>
+<div class="form-group">
+  {{ render_field(form.database_dir, class_="form-control") }}
+  <!--<input type="file" id="ctrl" webkitdirectory directory multiple/>-->
+</div>
+
+<p><input class="btn btn-primary" type="submit" value="Submit">
+</form>
+</div>
+{% endblock %}

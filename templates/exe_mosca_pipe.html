@@ -1,0 +1,670 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+<style>
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid pink;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+span {
+    content: "\2705";
+}
+</style>
+
+
+<div class="jumbotron text-left">
+<br>
+<h1> <small>MOSCA's Project : <strong>{{name}} is running!</strong></small></h1>
+
+{% from "includes/_formhelpers.html" import render_field %}
+<form method="POST" action="">
+<style media="screen">
+.shell-wrap {
+width: 1000px;
+margin: 50px auto 0 auto;
+box-shadow: 0 0 30px rgba(0,0,0,0.4);
+
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
+
+.shell-top-bar {
+text-align: center;
+color: #525252;
+padding: 5px 0;
+margin: 0;
+text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+font-size: 0.85em;
+border: 1px solid #CCCCCC;
+border-bottom: none;
+
+-webkit-border-top-left-radius: 3px;
+-webkit-border-top-right-radius: 3px;
+-moz-border-radius-topleft: 3px;
+-moz-border-radius-topright: 3px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+
+background: #f7f7f7; /* Old browsers */
+background: -moz-linear-gradient(top,  #f7f7f7 0%, #B8B8B8 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#B8B8B8)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #f7f7f7 0%,#B8B8B8 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #f7f7f7 0%,#B8B8B8 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #f7f7f7 0%,#B8B8B8 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #f7f7f7 0%,#B8B8B8 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#B8B8B8',GradientType=0 ); /* IE6-9 */
+}
+
+.shell-body {
+margin: 0;
+padding: 5px;
+list-style: none;
+background: #141414;
+color: #45D40C;
+font: 0.8em 'Andale Mono', Consolas, 'Courier New';
+line-height: 1.6em;
+
+-webkit-border-bottom-right-radius: 3px;
+-webkit-border-bottom-left-radius: 3px;
+-moz-border-radius-bottomright: 3px;
+-moz-border-radius-bottomleft: 3px;
+border-bottom-right-radius: 3px;
+border-bottom-left-radius: 3px;
+}
+
+.shell-body li:before {
+content: '$';
+position: absolute;
+left: 0;
+top: 0;
+}
+
+.shell-body li {
+word-wrap: break-word;
+position: relative;
+padding: 0 0 0 15px;
+}
+</style>
+
+	<div class="shell-wrap">
+	  <p class="shell-top-bar">/Mosca_pipeline</p>
+	  <ul class="shell-body">
+	    <li>{{exe_mosca}}</li>
+
+			<!--<li></li>
+			<li>Mosca is running...</li>
+			<li>Step1 --- Status:</li>
+			<li>$</li>
+			<li>Step2 --- Status:</li>
+			<li>$</li>
+			<li>Step3 --- Status:</li>
+			<li>$</li>
+			<li>Step4 --- Status:</li>
+			<li>$</li>
+			<li>Step5 --- Status:</li>
+			<li>$</li>-->
+	  </ul>
+	</div>
+
+
+
+</form>
+<p></p>
+<p></p>
+<p></p>
+<p align="center"><td><a href="/krona" class="btn btn-success">View Krona Plot</a></td>
+</p>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+{% if steps == [] %}
+<script type="text/javascript">
+setTimeout(function() {
+  location.reload();
+}, 30000);
+</script>
+
+<div class="container">
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+			</h4>
+		</div>
+		<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+			<div class="panel-body">
+				<div class="loader"></div>
+
+			</div>
+		</div>
+	</div>
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+				</h4>
+			</div>
+			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+				<div class="panel-body">
+
+					<p><div class="loader"></div></p>
+
+
+				</div>
+			</div>
+		</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+					</h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+					<div class="panel-body">
+						<div class="loader"></div>
+
+					</div>
+				</div>
+			</div>
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+						</h4>
+					</div>
+					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+						<div class="panel-body">
+							<div class="loader"></div>
+
+						</div>
+					</div>
+				</div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+							</h4>
+						</div>
+						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+							<div class="panel-body">
+								<div class="loader"></div>
+
+							</div>
+						</div>
+					</div>
+{% endif %}
+
+
+{% if steps|length == 1 %}
+<script type="text/javascript">
+setTimeout(function() {
+  location.reload();
+}, 30000);
+</script>
+
+<div class="container">
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+			</h4>
+		</div>
+		<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+			<div class="panel-body">
+				<p>Preprocessing finished &#9989;</p>
+
+			</div>
+		</div>
+	</div>
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+				</h4>
+			</div>
+			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+				<div class="panel-body">
+
+					<p><div class="loader"></div></p>
+
+
+				</div>
+			</div>
+		</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+					</h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+					<div class="panel-body">
+            <p><div class="loader"></div></p>
+
+					</div>
+				</div>
+			</div>
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+						</h4>
+					</div>
+					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+						<div class="panel-body">
+							<div class="loader"></div>
+
+						</div>
+					</div>
+				</div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+							</h4>
+						</div>
+						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+							<div class="panel-body">
+								<div class="loader"></div>
+
+							</div>
+						</div>
+					</div>
+
+
+ {% endif %}
+
+ {% if steps|length == 2 %}
+ <script type="text/javascript">
+ setTimeout(function() {
+   location.reload();
+ }, 30000);
+ </script>
+ <div class="container">
+
+ <div class="panel-group" id="accordion">
+ 	<div class="panel panel-default">
+ 		<div class="panel-heading">
+ 			<h4 class="panel-title">
+ 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+ 			</h4>
+ 		</div>
+ 		<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 			<div class="panel-body">
+ 				<p>Preprocessing finished &#9989;</p>
+
+ 			</div>
+ 		</div>
+ 	</div>
+
+
+ 		<div class="panel panel-default">
+ 			<div class="panel-heading">
+ 				<h4 class="panel-title">
+ 					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+ 				</h4>
+ 			</div>
+ 			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 				<div class="panel-body">
+
+          <p>Assembly finished &#9989;</p>
+
+ 				</div>
+ 			</div>
+ 		</div>
+
+
+ 			<div class="panel panel-default">
+ 				<div class="panel-heading">
+ 					<h4 class="panel-title">
+ 						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+ 					</h4>
+ 				</div>
+ 				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 					<div class="panel-body">
+             <p><div class="loader"></div></p>
+
+ 					</div>
+ 				</div>
+ 			</div>
+
+
+ 				<div class="panel panel-default">
+ 					<div class="panel-heading">
+ 						<h4 class="panel-title">
+ 							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+ 						</h4>
+ 					</div>
+ 					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 						<div class="panel-body">
+ 							<div class="loader"></div>
+
+ 						</div>
+ 					</div>
+ 				</div>
+
+
+ 					<div class="panel panel-default">
+ 						<div class="panel-heading">
+ 							<h4 class="panel-title">
+ 								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+ 							</h4>
+ 						</div>
+ 						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 							<div class="panel-body">
+ 								<div class="loader"></div>
+
+ 							</div>
+ 						</div>
+ 					</div>
+ {% endif %}
+
+ {% if steps|length == 3 %}
+ <script type="text/javascript">
+ setTimeout(function() {
+   location.reload();
+ }, 30000);
+ </script>
+ <div class="container">
+
+ <div class="panel-group" id="accordion">
+   <div class="panel panel-default">
+     <div class="panel-heading">
+       <h4 class="panel-title">
+         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+       </h4>
+     </div>
+     <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+       <div class="panel-body">
+         <p>Preprocessing finished &#9989;</p>
+
+       </div>
+     </div>
+   </div>
+
+
+     <div class="panel panel-default">
+       <div class="panel-heading">
+         <h4 class="panel-title">
+           <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+         </h4>
+       </div>
+       <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+         <div class="panel-body">
+
+          <p>Assembly finished &#9989;</p>
+
+         </div>
+       </div>
+     </div>
+
+
+       <div class="panel panel-default">
+         <div class="panel-heading">
+           <h4 class="panel-title">
+             <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+           </h4>
+         </div>
+         <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+           <div class="panel-body">
+             <p>Annotation finished &#9989;</p>
+
+           </div>
+         </div>
+       </div>
+
+
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4 class="panel-title">
+               <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+             </h4>
+           </div>
+           <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+             <div class="panel-body">
+               <div class="loader"></div>
+
+             </div>
+           </div>
+         </div>
+
+
+           <div class="panel panel-default">
+             <div class="panel-heading">
+               <h4 class="panel-title">
+                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+               </h4>
+             </div>
+             <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+               <div class="panel-body">
+                 <div class="loader"></div>
+
+               </div>
+             </div>
+           </div>
+ {% endif %}
+
+
+  {% if steps|length == 4 %}
+  <script type="text/javascript">
+  setTimeout(function() {
+    location.reload();
+  }, 30000);
+  </script>
+  <div class="container">
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+        <div class="panel-body">
+          <p>Preprocessing finished &#9989;</p>
+
+        </div>
+      </div>
+    </div>
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+          <div class="panel-body">
+
+           <p>Assembly finished &#9989;</p>
+
+          </div>
+        </div>
+      </div>
+
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+            <div class="panel-body">
+              <p>Annotation finished &#9989;</p>
+
+            </div>
+          </div>
+        </div>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+              <div class="panel-body">
+                <p>Binning finished &#9989;</p>
+              </div>
+            </div>
+          </div>
+
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+                <div class="panel-body">
+                  <div class="loader"></div>
+
+                </div>
+              </div>
+            </div>
+  {% endif %}
+  {% if steps|length == 5 %}
+  <div class="container">
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Step 1 output</a>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+        <div class="panel-body">
+          <p>Preprocessing finished &#9989;</p>
+
+        </div>
+      </div>
+    </div>
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Step 2 output</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+          <div class="panel-body">
+
+           <p>Assembly finished &#9989;</p>
+
+          </div>
+        </div>
+      </div>
+
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Step 3 output</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+            <div class="panel-body">
+              <p>Annotation finished &#9989;</p>
+
+            </div>
+          </div>
+        </div>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Step 4 output</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+              <div class="panel-body">
+                <p>Binning finished &#9989;</p>
+              </div>
+            </div>
+          </div>
+
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Step 5 output</a>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+                <div class="panel-body">
+                  <p>Expression finished &#9989;</p>
+                </div>
+              </div>
+            </div>
+  {% endif %}
+
+					</div>
+
+
+				</div>
+
+
+
+
+
+
+</div>
+{% endblock %}

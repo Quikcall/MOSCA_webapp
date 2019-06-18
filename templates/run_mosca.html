@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br>
+<div class="jumbotron text-left" >
+
+  <h1>MOSCA pipeline </h1>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+  <div class="container">
+
+    <p><strong>Note:</strong> Select a set samples, to run <strong>MOSCA pipeline</strong>.</p>
+    <p><small>If problems occur consult documentation or email support.</small></p>
+
+
+
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Select samples to be used in the pipeline</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in">
+          <div class="panel-body">
+
+
+              {{ render_field(form.samples_list) }}
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    </form>
+    </body>
+
+    <p><input class="btn btn-primary" type="submit" value="Submit">
+    <a href="/dashboard" class="btn btn-primary">Back to dashboard</a>
+
+    {% endblock %}
+    <!--
+    <table class="table table-striped" style="width:100%" rowspan='10'>
+      <tr>
+        <th>Samples Name</th>
+        <th>Condition</th>
+        <th>MG Samples</th>
+        <th></th>
+        <th>MG Description</th>
+        <th>MT Samples</th>
+        <th></th>
+        <th>MT Description</th>
+        <th></th>
+        <th></th>
+        </tr>
+      {% for samples in samples %}
+        <tr>
+          <td>{{samples['samples_name']}}</td>
+          <td>{{samples.samples_condition}}</td>
+          <td>{{samples.mg_sample1}}</td>
+          <td>{{samples.mg_sample2}}</td>
+          <td>{{samples.mg_description}}</td>
+          <td>{{samples.mt_sample1}}</td>
+          <td>{{samples.mt_sample2}}</td>
+          <td>{{samples.mt_description}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    //-->

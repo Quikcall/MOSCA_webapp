@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="jumbotron text-left">
+<br>
+<h1>MOSCA's Project: {{name}}</h1>
+<p> Edit sample {{s_name}} </p>
+{% from "includes/_formhelpers.html" import render_field %}
+<form method="POST" enctype="multipart/form-data">
+  <style media="screen">
+   select {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: gray;
+    display: inline-block;
+    font-size: 13px;
+    height: 30px;
+    line-height: 18px;
+    padding: 4px;
+    width: 400px;
+  }
+  </style>
+  <!--
+  <script type="text/javascript">
+    $(document).ready(function(){
+    $("#moreFields").click(function(){
+        $("#container").clone().appendTo("#container");
+    });
+  });
+    </script>
+  //-->
+  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body style='margin:0;padding:0;'>
+
+  <div class="container">
+
+    <p><small><strong>Note:</strong> Introduce samples intended to use in project <strong>(It is possible to add multiple samples to a project)</strong>.</small></p>
+    <p><small>If problems occur consult documentation or email support.</small></p>
+    <p></p>
+    <div class="form-group">
+      {{ render_field(form.samples_name, class_="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.samples_condition, class_="form-control") }}
+    </div>
+
+
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">MG Samples</a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+          <div class="panel-body">
+
+            <div style="display:inline-block;">
+              {{render_field(form.mg_sample1)}}
+            </div>
+            <div style="display:inline-block;">
+              {{render_field(form.mg_sample2) }}
+            </div>
+            <p></p>
+            <div class="form-group">
+              {{ render_field(form.mg_description, class_="form-control") }}
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">MT Samples</a>
+            </h4>
+          </div>
+          <div id="collapse2" class="panel-collapse collapse in" style="background-color:lightblue">
+            <div class="panel-body">
+
+
+              <div style="display:inline-block;">
+                {{render_field(form.mt_sample1)}}
+              </div>
+
+              <div style="display:inline-block;">
+                {{render_field(form.mt_sample2) }}
+              </div>
+              <p></p>
+
+              <div class="form-group">
+                {{ render_field(form.mt_description, class_="form-control") }}
+              </div>
+              </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+    <p><input class="btn btn-primary" type="submit" value="Submit">
+
+
+    <a href="/dashboard" class="btn btn-primary">Back to dashboard</a>
+
+    <a href="/add_data/{{id}}" class="btn btn-primary">Back to Add data</a>
+
+    <!--
+    <a href="/update_sample/{{s_id}}" class="btn btn-primary" method = 'post'>ADD PLS</a>
+    //-->
+
+
+  </form>
+
+
+  <hr>
+
+
+
+
+
+</form>
+{% endblock %}

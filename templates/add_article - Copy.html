@@ -1,0 +1,172 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-left">
+<br>
+<h1>MOSCA Parameters</h1>
+{% from "includes/_formhelpers.html" import render_field %}
+<form method="POST" action="">
+<div class="form-group">
+  {{ render_field(form.project_name, class_="form-control", id='Project Name') }}
+</div>
+<div class="form-group">
+  {{ render_field(form.description, class_="form-control", id = 'editor') }}
+</div>
+<div class="input-default-wrapper mt-3">
+    {{render_field(form.input_file)}}
+</div>
+<p></p>
+<span class="input-group-text mb-3" id="input1">Metagenomic Samples</span>
+<div style="width:300px; display:inline-block;">
+  {{render_field(form.mg_sample1)}}
+</div>
+<div style="width:300px; display:inline-block;">
+  {{render_field(form.mg_sample2) }}
+</div>
+<p></p>
+<div class="form-group">
+  {{ render_field(form.mg_description, class_="form-control", id = 'editor') }}
+</div>
+
+<p></p>
+<span class="input-group-text mb-3" id="input1">Metatranscriptomics Samples</span>
+<div style="width:300px; display:inline-block;">
+  {{render_field(form.mt_sample1)}}
+</div>
+<div style="width:300px; display:inline-block;">
+  {{render_field(form.mt_sample2) }}
+</div>
+<p></p>
+
+<div class="form-group">
+  {{ render_field(form.mt_description, class_="form-control", id = 'editor') }}
+</div>
+
+<div class="form-group">
+  {{ render_field(form.adapters, class_="form-control") }}
+</div>
+
+<span class="input-group-text mb-3" id="input1">Output</span>
+
+
+
+<div class="form-group">
+  {{ render_field(form.output_dir, class_="form-control") }}
+  <!--<input type="file" id="ctrl" webkitdirectory directory multiple/-->
+</div>
+
+<div class="form-group">
+  {{ render_field(form.database_dir, class_="form-control") }}
+  <!--<input type="file" id="ctrl" webkitdirectory directory multiple/>-->
+</div>
+
+<div class="form-group">
+  {{ render_field(form.conditions, class_="form-control") }}
+</div>
+
+<div class="form-group">
+  {{ render_field(form.threads, class_="form-control") }}
+</div>
+
+<div class="form-group">
+  {{ render_field(form.sequencing, class_="form-control") }}
+</div>
+
+<div class="form-group">
+  {{ render_field(form.quality_scores, class_="form-control") }}
+</div>
+
+<p><input class="btn btn-primary" type="submit" value="Submit">
+</div>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Accordion Example</h2>
+  <p><strong>Note:</strong> The <strong>data-parent</strong> attribute makes sure that all collapsible elements under the specified parent will be closed when one of the collapsible item is shown.</p>
+
+
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Samples Parameters</a>
+        </h4>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <span class="input-group-text mb-3" id="input1">Metagenomic Samples</span>
+          <div style="width:300px; display:inline-block;">
+            {{render_field(form.mg_sample1)}}
+          </div>
+          <div style="width:300px; display:inline-block;">
+            {{render_field(form.mg_sample2) }}
+          </div>
+          <p></p>
+          <div class="form-group">
+            {{ render_field(form.mg_description, class_="form-control", id = 'editor') }}
+          </div>
+
+          <p></p>
+          <span class="input-group-text mb-3" id="input1">Metatranscriptomics Samples</span>
+          <div style="width:300px; display:inline-block;">
+            {{render_field(form.mt_sample1)}}
+          </div>
+          <div style="width:300px; display:inline-block;">
+            {{render_field(form.mt_sample2) }}
+          </div>
+          <p></p>
+
+          <div class="form-group">
+            {{ render_field(form.mt_description, class_="form-control", id = 'editor') }}
+          </div>
+
+          <div class="form-group">
+            {{ render_field(form.adapters, class_="form-control") }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Output Parameters</a>
+        </h4>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse in">
+        <div class="panel-body">
+          {{ render_field(form.output_dir, class_="form-control") }}
+          <!--<input type="file" id="ctrl" webkitdirectory directory multiple/-->
+
+          {{ render_field(form.database_dir, class_="form-control") }}
+          <!--<input type="file" id="ctrl" webkitdirectory directory multiple/>-->
+
+          {{ render_field(form.conditions, class_="form-control") }}
+
+          {{ render_field(form.threads, class_="form-control") }}
+
+          {{ render_field(form.sequencing, class_="form-control") }}
+
+          {{ render_field(form.quality_scores, class_="form-control") }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+
+</form>
+{% endblock %}

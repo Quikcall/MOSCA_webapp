@@ -1,0 +1,492 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="jumbotron text-left">
+<br>
+<h1>MOSCA Parameters</h1>
+{% from "includes/_formhelpers.html" import render_field %}
+<form method="POST" action="">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <p><strong>Note:</strong> Introduce parameters in order to create a project, used to run <strong>MOSCA pipeline</strong>.</p>
+  <p><small>If problems occur consult documentation or email support.</small></p>
+
+
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Project Input</a>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+        <div class="panel-body">
+          <div class="form-group">
+            {{ render_field(form.project_name, class_="form-control", id='Project Name') }}
+          </div>
+          <div class="form-group">
+            {{ render_field(form.author, class_="form-control", id='Author') }}
+          </div>
+          <div class="form-group">
+            {{ render_field(form.description, class_="form-control", id = 'editor') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">General Parameters</a>
+        </h4>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse out" style="background-color:lightblue">
+        <div class="panel-body">
+
+          {{ render_field(form.database_dir, class_="form-control") }}
+          <!--<input type="file" id="ctrl" webkitdirectory directory multiple/>-->
+
+          {{ render_field(form.threads, class_="form-control") }}
+
+          {{ render_field(form.sequencing, class_="form-control") }}
+
+          {{ render_field(form.quality_scores, class_="form-control") }}
+
+          {{ render_field(form.output_lvl, class_="form-control") }}
+
+          {{ render_field(form.data_type, class_="form-control") }}
+
+        <div style="width:300px;display:inline-block;">
+          {{ render_field(form.preprocessing) }}
+        </div>
+        <div style="width:300px;display:inline-block;">
+          {{ render_field(form.assembly) }}
+        </div>
+        <div style="width:300px;display:inline-block;">
+          {{ render_field(form.binning) }}
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion2" href="#collapse8">UniProt ID mapping Options</a>
+        </h4>
+      </div>
+      <div id="collapse8" class="panel-collapse collapse out" style="background-color:lightblue">
+        <div class="panel-body">
+          <p>UniProt ID mapping</p>
+
+          <p></p>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse81">Names & Taxonomy</a>
+              </h4>
+            </div>
+            <div id="collapse81" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_names_tax) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse82">Sequences</a>
+              </h4>
+            </div>
+            <div id="collapse82" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_sequences) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse"  href="#collapse83">Function</a>
+              </h4>
+            </div>
+            <div id="collapse83" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_function) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse84">Miscellaneous</a>
+              </h4>
+            </div>
+            <div id="collapse84" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_miscellaneous) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse85">Interaction</a>
+              </h4>
+            </div>
+            <div id="collapse85" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_interaction) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse86">Expression</a>
+              </h4>
+            </div>
+            <div id="collapse86" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_expression) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse88">Gene Ontology (GO)</a>
+              </h4>
+            </div>
+            <div id="collapse88" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_gene_ont) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse89">Chemical entities (ChEBI)</a>
+              </h4>
+            </div>
+            <div id="collapse89" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_chebi) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse90">Pathology & Biotech</a>
+              </h4>
+            </div>
+            <div id="collapse90" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_path_biot) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse91">Subcellular location</a>
+              </h4>
+            </div>
+            <div id="collapse91" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_cell_loc) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse92">PTM / Processsing</a>
+              </h4>
+            </div>
+            <div id="collapse92" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_ptm) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse93">Structure</a>
+              </h4>
+            </div>
+            <div id="collapse93" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_structure) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse94">Publications</a>
+              </h4>
+            </div>
+            <div id="collapse94" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_pubs) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse95">Date of</a>
+              </h4>
+            </div>
+            <div id="collapse95" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_date) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse96">Family & Domains</a>
+              </h4>
+            </div>
+            <div id="collapse96" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_family) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse97">Taxonomic lineage</a>
+              </h4>
+            </div>
+            <div id="collapse97" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_taxo_lin) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse98">Taxonomic Identifier</a>
+              </h4>
+            </div>
+            <div id="collapse98" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div class="form-group">
+                  {{render_field(form.up_taxo_id) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse"  href="#collapse99">Cross database references</a>
+              </h4>
+            </div>
+            <div id="collapse99" class="panel-collapse collapse out">
+              <div class="panel-body">
+                {{render_field(form.up_cross_db_ref) }}
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse40">Advanced Options</a>
+    </h4>
+  </div>
+  <div id="collapse40" class="panel-collapse collapse out" style="background-color:lightblue">
+    <div class="panel-body">
+
+      <p></p>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse41">Assembly Options</a>
+          </h4>
+        </div>
+        <div id="collapse41" class="panel-collapse collapse out">
+          <div class="panel-body">
+            <div class="form-group" >
+            {{render_field(form.assembler, class_="form-control") }}
+
+            {{render_field(form.memory, class_="form-control") }}
+
+            {{render_field(form.k_mer_sizes, class_="form-control") }}
+            <small>*If using MEGAHIT, minimum kmer is 15 and maximum is 255, with a minimum increment between kmers of 28. Default kmer list is: 21,29,39,59,79,99,119,141</small><p></p>
+            <small>*If using MetaSPAdes, maximum kmer is 127. Default kmer list is 21,33,55</small>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse42">MetaQUAST Options</a>
+          </h4>
+        </div>
+        <div id="collapse42" class="panel-collapse collapse out">
+          <div class="panel-body">
+            <div class="form-group">
+              {{render_field(form.m, class_="form-control") }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse"  href="#collapse43">Bowtie2 Options</a>
+          </h4>
+        </div>
+        <div id="collapse43" class="panel-collapse collapse out">
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Alignment Parameters</p>
+
+              {{render_field(form.alignment_method, class_="form-control") }}
+              {{render_field(form.alignment_options, class_="form-control") }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse44">FragGeneScan Options</a>
+          </h4>
+        </div>
+        <div id="collapse44" class="panel-collapse collapse out">
+          <div class="panel-body">
+            <div class="form-group">
+              {{render_field(form.train, class_="form-control") }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" href="#collapse45">Binning Options</a>
+          </h4>
+        </div>
+        <div id="collapse45" class="panel-collapse collapse out">
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Binning</p>
+              {{render_field(form.binner, class_="form-control") }}
+              {{render_field(form.min_contig_len, class_="form-control") }}
+              {{render_field(form.k_mer_len, class_="form-control") }}
+              {{render_field(form.marker, class_="form-control") }}
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+  </div>
+  <p><input class="btn btn-primary" type="submit" value="Submit">
+
+</div>
+
+
+</body>
+
+
+</form>
+{% endblock %}

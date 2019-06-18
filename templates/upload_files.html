@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br>
+  <h1>MOSCA pipeline </h1>
+    <p>Upload new File </p>
+    <p></p>
+    <form method=post enctype=multipart/form-data>
+      <p></p>
+      <input type=file name=file>
+      <p></p>
+      <input type=submit value=Upload class="btn btn-success">
+    </form>
+    <table class="table table-striped">
+      <tr>
+        <th>Filename</th>
+        <th>Author</th>
+        <th>Date</th>
+        <th></th>
+      </tr>
+        <tr>
+          {% for file in files %}
+            <tr>
+              <td>{{file.filename}}</td>
+              <td>{{file.username}}</td>
+              <td>{{file.create_date}}</td>
+            </tr>
+          {% endfor %}
+      </tr>
+  </table>
+  {% endblock %}
