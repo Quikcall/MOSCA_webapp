@@ -1,6 +1,6 @@
-CREATE DATABASE `try` DEFAULT CHARACTER SET latin1;
+CREATE DATABASE `myproject` DEFAULT CHARACTER SET latin1;
 
-USE `try`;
+USE `myproject`;
 
 DROP TABLE IF EXISTS `projects`;
 DROP TABLE IF EXISTS `samples`;
