@@ -1,6 +1,13 @@
+CREATE DATABASE `try` DEFAULT CHARACTER SET latin1;
+
+USE `try`;
+
 DROP TABLE IF EXISTS `projects`;
-DROP TABLE IF EXISTS samples;
-DROP TABLE IF EXISTS exe_projects`;
+DROP TABLE IF EXISTS `samples`;
+DROP TABLE IF EXISTS `exe_projects`;
+DROP TABLE IF EXISTS `users`;
+
+
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -67,5 +74,12 @@ CREATE TABLE `exe_projects` (
   PRIMARY KEY (`exe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-
-
+CREATE TABLE `users` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(100) DEFAULT NULL,
+ `username` varchar(30) DEFAULT NULL,
+ `email` varchar(150) DEFAULT NULL,
+ `password` varchar(100) DEFAULT NULL,
+ `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1
