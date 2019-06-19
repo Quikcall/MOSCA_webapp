@@ -1,6 +1,6 @@
-CREATE DATABASE `myproject` DEFAULT CHARACTER SET latin1;
+CREATE DATABASE `try` DEFAULT CHARACTER SET latin1;
 
-USE `myproject`;
+USE `try`;
 
 DROP TABLE IF EXISTS `projects`;
 DROP TABLE IF EXISTS `samples`;
@@ -82,4 +82,6 @@ CREATE TABLE `users` (
  `password` varchar(100) DEFAULT NULL,
  `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+INSERT INTO `users`(`name`,`username`,`email`,`password`) VALUES (`teste teste`, `teste`, `teste@teste.teste`, `teste`);
