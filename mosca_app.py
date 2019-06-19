@@ -454,7 +454,7 @@ def add_article():
 
 class SamplesForm(Form):
     #directories = get_filelist()
-    drop_out_dir = get_filelist('/media/sf_shared_folder/MOSCA_app/templates')
+    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'templates')
     print(drop_out_dir)
     #drop_out_dir.append(('','None'))
     #for i in directories:
@@ -920,17 +920,17 @@ def run_mosca(id):
     return render_template('run_mosca.html', form=form, samples = samples)
 
 #####################################################################################################################################################
-@app.route('/start',methods = ['GET', 'POST'])
+#@app.route('/start',methods = ['GET', 'POST'])
 def get_shell_script_output_using_communicate():
 
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
     print(stdout.decode('utf-8'))
-    if stderr:
-        return str(Exception("Error "+str(stderr)))
+    #if stderr:
+    #    return str(Exception("Error "+str(stderr)))
         #raise Exception("Error "+str(stderr))
 
-    return stdout.decode('utf-8')
+    #return stdout.decode('utf-8')
 
 
 def get_shell_script_output_using_check_output():
@@ -945,16 +945,40 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     output = open('file.txt','r')
     steps = []
     report_out = []
+    bin_ab = [[],[]]
+    bin_sum = [[],[]]
     f_files = []
     for line in output:
         print(line)
         steps.append(line.rstrip('\n'))
         if 'assembly' in line :
-            report = open('SimulatedMGMT/Assembly/quality_control/report.tsv', 'r')
+            report = open('static/Assembly/quality_control/report.tsv', 'r')
             for l in report:
                 report_out.append(l.rstrip('\n'))
+
+        if 'binning' in line:
+            bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
+            for i in range(len(bin_files)):
+                if bin_files[i][1] != 'None' :
+                    f = open(bin_files[i][0][34:],'r')
+                    print(f)
+                    if i == 1:
+                        bin_ab[0].append(bin_files[i][0][34:].split('/')[-1])
+                        for l in f:
+
+                            bin_ab[1].append(l.rstrip('\n'))
+                    else:
+                        bin_sum[0].append(bin_files[i][0][34:].split('/')[-1])
+                        for l in f:
+
+                            bin_sum[1].append(l.rstrip('\n'))
+                    #f = open()
+            print(bin_ab)
+            print(bin_sum)
+
+
         if 'preprocessing' in line:
-            pre_files = get_filelist('/media/sf_shared_folder/MOSCA_app/static/Preprocess/FastQC')
+            pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
 
             for file in pre_files:
                 if 'paired' and 'html' in file[0]:
@@ -966,17 +990,18 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
             print(f_files)
 
     print('HI\n',report_out)
+    print(os.path.join(app.instance_path)[0:-8])
 
-    return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files)
+    return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
 
 ###############################################################
 @app.route('/annotation/taxonomy', methods = ['GET', 'POST'])
 def krona1():
-    return send_file('SimulatedMGMT/Annotation/mg_taxonomy.html')
+    return send_file('static/Annotation/mg_taxonomy.html')
 
 @app.route('/annotation/cogs', methods = ['GET', 'POST'])
 def krona2():
-    return send_file('SimulatedMGMT/Annotation/mg_cogs.html')
+    return send_file('static/Annotation/mg_cogs.html')
 
 
 #EXPRESSION CONSTRUCTION
@@ -1079,9 +1104,9 @@ def star_run(id, name, samples_id):
     #exe_mosca = get_shell_script_output_using_communicate()
     #print(exe_mosca)
     #print(background_process())
+    get_shell_script_output_using_communicate()
 
-
-    return get_shell_script_output_using_communicate()
+    return exe_mosca
 
 
 @app.route('/background_process')
@@ -1110,174 +1135,7 @@ def background_process():
         except Exception as e:
             raise
 
-    '''
-    cur = mysql.connection.cursor()
-
-    # Get articles
-    result = cur.execute("SELECT * FROM samples WHERE id = %s", [id])
-
-    samples = cur.fetchall()
-
-    choices = []
-
-    for sample in samples:
-        choices.append((sample,samples))
-    print(choices)
-
-    form = SelectMultipleField('Samples', choices=choices , widget=select_multi_checkbox)
-
-    if samples:
-        return render_template('run_mosca.html', samples=samples, form=form)
-    else:
-        msg = 'No Data Found'
-        return render_template('run_mosca.html', msg=msg)
-    # Close connection
-    cur.close()
-    #form = choose_samples(request.form)
-    #return render_template('run_mosca.html', form = form)
-    '''
-
-    '''
-    project_name = form.project_name.data
-    description = form.description.data
-    input_file = form.input_file.data
-    adapters = form.adapters.data
-
-
-    #OUTPUT
-    output_dir = form.output_dir.data
-    database_dir = form.database_dir.data
-    conditions = form.conditions.data
-    threads = form.threads.data
-    sequencing = form.sequencing.data
-    quality_scores = form.quality_scores.data
-
-    #ASSEMBLY
-    memory = form.memory.data
-    k_mer_sizes = form.k_mer_sizes.data
-
-    #MetaQUAST
-    m = form.m.data
-
-    #Bowtie2
-    end2end = form.end2end.data
-    local = form.local.data
-    alignment_method = form.alignment_method.data
-    end2end_options = form.end2end_options.data
-    local_options = form.local_options.data
-
-    #FragGeneScan
-    train_dir = form.train_dir.data
-    train = form.train.data
-
-    #UniProt
-    step = form.step.data
-    up_names_tax = form.up_names_tax.data
-    up_sequences = form.up_sequences.data
-    up_function = form.up_function.data
-    up_miscellaneous = form.up_miscellaneous.data
-    up_interaction = form.up_interaction.data
-    up_expression = form.up_expression.data
-    up_gene_ont = form.up_gene_ont.data
-    up_chebi = form.up_chebi.data
-    up_path_biot = form.up_path_biot.data
-    up_cell_loc = form.up_cell_loc.data
-    up_ptm = form.up_ptm.data
-    up_structure = form.up_structure.data
-    up_pubs = form.up_pubs.data
-    up_date = form.up_date.data
-    up_family = form.up_family.data
-    up_taxo_lin = form.up_taxo_lin.data
-    up_taxo_id = form.up_taxo_id.data
-
-    #VizBin
-    min_contig_len = form.min_contig_len.data
-    k_mer_len = form.k_mer_len.data
-
-    '''
-
-
-
-
-
-
-
-
-
-def main():
-    app.run()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-class FileForm(Form):
-    filen = StringField('Filename', [validators.Length(min=1, max=300)])
-    body = TextAreaField('Body', [validators.Length(min=30)])
-
-
-@app.route('/upload_files', methods = ['GET','POST'])
-@is_logged_in
-def upload_files():
-    cur = mysql.connection.cursor()
-    res = cur.execute("SELECT * FROM files WHERE username = %s", [session['username']])
-    files = cur.fetchall()
-
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part', 'danger')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file', 'danger')
-            return redirect(request.url)
-
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            cur = mysql.connection.cursor()
-            #execute
-            cur.execute('INSERT INTO files(username, filename) VALUES(%s,%s)',(session['username'], filename))
-            #commit to db
-            mysql.connection.commit()
-            #close connection
-
-            flash('File {} uploaded'.format(filename), 'success')
-            return redirect(url_for('upload_files'))
-
-    #if res> 0:
-    return render_template('upload_files.html', files = files)
-    #else:
-    #    return render_template('upload_files.html')
-    cur.close()
-
+    
 
 
 
