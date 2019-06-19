@@ -34,6 +34,46 @@ span {
 }
 </style>
 
+<script>
+function includeHTML() {
+  var z, i, elmnt, file, xhttp;
+  /*loop through a collection of all HTML elements:*/
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    elmnt = z[i];
+    /*search for elements with a certain atrribute:*/
+    file = elmnt.getAttribute("w3-include-html");
+    if (file) {
+      /*make an HTTP request using the attribute value as the file name:*/
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+          /*remove the attribute, and call this function once more:*/
+          elmnt.removeAttribute("w3-include-html");
+          includeHTML();
+        }
+      }
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      /*exit the function:*/
+      return;
+    }
+  }
+};
+</script>
+
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+</style>
+
+<div w3-include-html="all_taxonomy.html"></div>
 
 <div class="jumbotron text-left">
 <br>
@@ -178,7 +218,7 @@ setTimeout(function() {
 					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
 				</h4>
 			</div>
-			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+			<div id="collapse2" class="panel-collapse collapse in" style="background-color:lightblue">
 				<div class="panel-body">
 
 					<p><div class="loader"></div></p>
@@ -195,7 +235,7 @@ setTimeout(function() {
 						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
 					</h4>
 				</div>
-				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+				<div id="collapse3" class="panel-collapse collapse in" style="background-color:lightblue">
 					<div class="panel-body">
 						<div class="loader"></div>
 
@@ -210,7 +250,7 @@ setTimeout(function() {
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
 						</h4>
 					</div>
-					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+					<div id="collapse4" class="panel-collapse collapse in" style="background-color:lightblue">
 						<div class="panel-body">
 							<div class="loader"></div>
 
@@ -225,13 +265,16 @@ setTimeout(function() {
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
 							</h4>
 						</div>
-						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+						<div id="collapse5" class="panel-collapse collapse in" style="background-color:lightblue">
 							<div class="panel-body">
 								<div class="loader"></div>
 
 							</div>
 						</div>
 					</div>
+
+        </div>
+      </div>
 {% endif %}
 
 
@@ -244,16 +287,33 @@ setTimeout(function() {
 
 <div class="container">
 
-<div class="panel-group" id="accordion">
+<div class="panel-group" id="accordion1">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+				<a data-toggle="collapse" data-parent="#accordion1" href="#collapse1">Preprocessing &#9989;</a>
 			</h4>
 		</div>
-		<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+		<div id="collapse1" class="panel-collapse collapse out" style="background-color:lightblue">
 			<div class="panel-body">
-				<p>Preprocessing finished &#9989;</p>
+				<p>Preprocessing finished</p>
+        <!-- Moscar ficheiros forward/reverse paired .fastqc.html-->
+        {%for file in f_files%}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse{{loop.counter}}">{{file.split('/')[-1]}}</a>
+            </h4>
+          </div>
+          <div id="collapse{{loop.counter}}" class="panel-collapse collapse out">
+            <div class="panel-body">
+              <div>
+                <iframe src={{file}} width="900" height="900"></iframe>
+              </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
 
 			</div>
 		</div>
@@ -263,14 +323,13 @@ setTimeout(function() {
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+					<a data-toggle="collapse" data-parent="#accordion1" href="#collapse2">Assembly</a>
 				</h4>
 			</div>
-			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+			<div id="collapse2" class="panel-collapse collapse in" style="background-color:lightblue">
 				<div class="panel-body">
 
-					<p><div class="loader"></div></p>
-
+					<p><div class="loader"></div></p
 
 				</div>
 			</div>
@@ -280,10 +339,10 @@ setTimeout(function() {
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+						<a data-toggle="collapse" data-parent="#accordion1" href="#collapse3">Annotation</a>
 					</h4>
 				</div>
-				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+				<div id="collapse3" class="panel-collapse collapse in" style="background-color:lightblue">
 					<div class="panel-body">
             <p><div class="loader"></div></p>
 
@@ -295,10 +354,10 @@ setTimeout(function() {
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+							<a data-toggle="collapse" data-parent="#accordion1" href="#collapse4">Binning</a>
 						</h4>
 					</div>
-					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+					<div id="collapse4" class="panel-collapse collapse in" style="background-color:lightblue">
 						<div class="panel-body">
 							<div class="loader"></div>
 
@@ -310,16 +369,19 @@ setTimeout(function() {
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+								<a data-toggle="collapse" data-parent="#accordion1" href="#collapse5">Expression Analysis</a>
 							</h4>
 						</div>
-						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+						<div id="collapse5" class="panel-collapse collapse in" style="background-color:lightblue">
 							<div class="panel-body">
 								<div class="loader"></div>
 
 							</div>
 						</div>
 					</div>
+
+        </div>
+      </div>
 
 
  {% endif %}
@@ -332,16 +394,32 @@ setTimeout(function() {
  </script>
  <div class="container">
 
- <div class="panel-group" id="accordion">
+ <div class="panel-group" id="accordion2">
  	<div class="panel panel-default">
  		<div class="panel-heading">
  			<h4 class="panel-title">
- 				<a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+ 				<a data-toggle="collapse" data-parent="#accordion2" href="#collapse1">Preprocessing &#9989;</a>
  			</h4>
  		</div>
- 		<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 		<div id="collapse1" class="panel-collapse collapse out" style="background-color:lightblue">
  			<div class="panel-body">
- 				<p>Preprocessing finished &#9989;</p>
+ 				<p>Preprocessing finished</p>
+        {%for file in f_files%}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse{{loop.counter}}">{{file.split('/')[-1]}}</a>
+            </h4>
+          </div>
+          <div id="collapse{{loop.counter}}" class="panel-collapse collapse out">
+            <div class="panel-body">
+              <div>
+                <iframe src={{file}} width="900" height="900"></iframe>
+              </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
 
  			</div>
  		</div>
@@ -351,26 +429,37 @@ setTimeout(function() {
  		<div class="panel panel-default">
  			<div class="panel-heading">
  				<h4 class="panel-title">
- 					<a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+ 					<a data-toggle="collapse" data-parent="#accordion2" href="#collapse2">Assembly &#9989;</a>
  				</h4>
  			</div>
- 			<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 			<div id="collapse2" class="panel-collapse collapse out" style="background-color:lightblue">
  				<div class="panel-body">
 
-          <p>Assembly finished &#9989;</p>
+          <p>Assembly finished</p>
+
+          <div class='center' style="background-color:white;height:700px;width:500px;overflow:auto;border:8px solid white;padding:2%">
+
+           {% for report_out in report_out %}
+           <body>
+             <p><small>{{report_out}}</small></p>
+
+           </body>
+
+           {% endfor %}
 
  				</div>
  			</div>
  		</div>
+  </div>
 
 
  			<div class="panel panel-default">
  				<div class="panel-heading">
  					<h4 class="panel-title">
- 						<a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+ 						<a data-toggle="collapse" data-parent="#accordion2" href="#collapse3">Annotation</a>
  					</h4>
  				</div>
- 				<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 				<div id="collapse3" class="panel-collapse collapse in" style="background-color:lightblue">
  					<div class="panel-body">
              <p><div class="loader"></div></p>
 
@@ -382,10 +471,10 @@ setTimeout(function() {
  				<div class="panel panel-default">
  					<div class="panel-heading">
  						<h4 class="panel-title">
- 							<a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+ 							<a data-toggle="collapse" data-parent="#accordion2" href="#collapse4">Binning</a>
  						</h4>
  					</div>
- 					<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 					<div id="collapse4" class="panel-collapse collapse in" style="background-color:lightblue">
  						<div class="panel-body">
  							<div class="loader"></div>
 
@@ -397,16 +486,19 @@ setTimeout(function() {
  					<div class="panel panel-default">
  						<div class="panel-heading">
  							<h4 class="panel-title">
- 								<a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+ 								<a data-toggle="collapse" data-parent="#accordion2" href="#collapse5">Expression Analysis</a>
  							</h4>
  						</div>
- 						<div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+ 						<div id="collapse5" class="panel-collapse collapse in" style="background-color:lightblue">
  							<div class="panel-body">
  								<div class="loader"></div>
 
  							</div>
  						</div>
  					</div>
+
+        </div>
+      </div>
  {% endif %}
 
  {% if steps|length == 3 %}
@@ -417,16 +509,32 @@ setTimeout(function() {
  </script>
  <div class="container">
 
- <div class="panel-group" id="accordion">
+ <div class="panel-group" id="accordion3">
    <div class="panel panel-default">
      <div class="panel-heading">
        <h4 class="panel-title">
-         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+         <a data-toggle="collapse" data-parent="#accordion3" href="#collapse1">Preprocessing &#9989;</a>
        </h4>
      </div>
-     <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+     <div id="collapse1" class="panel-collapse collapse out" style="background-color:lightblue">
        <div class="panel-body">
-         <p>Preprocessing finished &#9989;</p>
+         <p>Preprocessing finished</p>
+         {%for file in f_files%}
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4 class="panel-title">
+               <a data-toggle="collapse" href="#collapse{{loop.counter}}">{{file.split('/')[-1]}}</a>
+             </h4>
+           </div>
+           <div id="collapse{{loop.counter}}" class="panel-collapse collapse out">
+             <div class="panel-body">
+               <div>
+                 <iframe src={{file}} width="900" height="900"></iframe>
+               </div>
+           </div>
+         </div>
+       </div>
+       {% endfor %}
 
        </div>
      </div>
@@ -436,28 +544,47 @@ setTimeout(function() {
      <div class="panel panel-default">
        <div class="panel-heading">
          <h4 class="panel-title">
-           <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+           <a data-toggle="collapse" data-parent="#accordion3" href="#collapse2">Assembly &#9989;</a>
          </h4>
        </div>
-       <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+       <div id="collapse2" class="panel-collapse collapse out" style="background-color:lightblue">
          <div class="panel-body">
 
-          <p>Assembly finished &#9989;</p>
+          <p>Assembly finished </p>
+
+          <div class='center' style="background-color:white;height:700px;width:500px;overflow:auto;border:8px solid white;padding:2%">
+
+           {% for report_out in report_out %}
+           <body>
+             <p><small>{{report_out}}</small></p>
+
+           </body>
+
+           {% endfor %}
 
          </div>
        </div>
+     </div>
      </div>
 
 
        <div class="panel panel-default">
          <div class="panel-heading">
            <h4 class="panel-title">
-             <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+             <a data-toggle="collapse" data-parent="#accordion3" href="#collapse3">Annotation &#9989;</a>
            </h4>
          </div>
-         <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+         <div id="collapse3" class="panel-collapse collapse out" style="background-color:lightblue">
            <div class="panel-body">
-             <p>Annotation finished &#9989;</p>
+             <p>Annotation finished</p>
+             <div style="display:inline-block;">
+               <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+             </div>
+             <div style="display:inline-block;">
+               <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+
+             </div>
 
            </div>
          </div>
@@ -467,10 +594,10 @@ setTimeout(function() {
          <div class="panel panel-default">
            <div class="panel-heading">
              <h4 class="panel-title">
-               <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+               <a data-toggle="collapse" data-parent="#accordion3" href="#collapse4">Binning</a>
              </h4>
            </div>
-           <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+           <div id="collapse4" class="panel-collapse collapse in" style="background-color:lightblue">
              <div class="panel-body">
                <div class="loader"></div>
 
@@ -482,16 +609,19 @@ setTimeout(function() {
            <div class="panel panel-default">
              <div class="panel-heading">
                <h4 class="panel-title">
-                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+                 <a data-toggle="collapse" data-parent="#accordion3" href="#collapse5">Expression Analysis</a>
                </h4>
              </div>
-             <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+             <div id="collapse5" class="panel-collapse collapse in" style="background-color:lightblue">
                <div class="panel-body">
                  <div class="loader"></div>
 
                </div>
              </div>
            </div>
+
+         </div>
+       </div>
  {% endif %}
 
 
@@ -503,16 +633,33 @@ setTimeout(function() {
   </script>
   <div class="container">
 
-  <div class="panel-group" id="accordion">
+  <div class="panel-group" id="accordion4">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Preprocessing</a>
+          <a data-toggle="collapse" data-parent="#accordion4" href="#collapse1">Preprocessing &#9989;</a>
         </h4>
       </div>
-      <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+      <div id="collapse1" class="panel-collapse collapse out" style="background-color:lightblue">
         <div class="panel-body">
-          <p>Preprocessing finished &#9989;</p>
+          <p>Preprocessing finished</p>
+
+          {%for file in f_files%}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse{{loop.counter}}">{{file.split('/')[-1]}}</a>
+              </h4>
+            </div>
+            <div id="collapse{{loop.counter}}" class="panel-collapse collapse out">
+              <div class="panel-body">
+                <div>
+                  <iframe src={{file}} width="900" height="900"></iframe>
+                </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
 
         </div>
       </div>
@@ -522,28 +669,46 @@ setTimeout(function() {
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Assembly</a>
+            <a data-toggle="collapse" data-parent="#accordion4" href="#collapse2">Assembly &#9989;</a>
           </h4>
         </div>
-        <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+        <div id="collapse2" class="panel-collapse collapse out" style="background-color:lightblue">
           <div class="panel-body">
 
-           <p>Assembly finished &#9989;</p>
+
+            <div class='center' style="background-color:white;height:700px;width:500px;overflow:auto;border:8px solid white;padding:2%">
+            {% for report_out in report_out %}
+            <body>
+              <p><small>{{report_out}}</small></p>
+
+            </body>
+
+            {% endfor %}
 
           </div>
         </div>
+      </div>
       </div>
 
 
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Annotation</a>
+              <a data-toggle="collapse" data-parent="#accordion4" href="#collapse3">Annotation &#9989;</a>
             </h4>
           </div>
-          <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+          <div id="collapse3" class="panel-collapse collapse out" style="background-color:lightblue">
             <div class="panel-body">
-              <p>Annotation finished &#9989;</p>
+              <p>Annotation finished</p>
+              <div style="display:inline-block;">
+                <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+              </div>
+              <div style="display:inline-block;">
+                <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+
+              </div>
+
 
             </div>
           </div>
@@ -553,12 +718,12 @@ setTimeout(function() {
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Binning</a>
+                <a data-toggle="collapse" data-parent="#accordion4" href="#collapse4">Binning &#9989;</a>
               </h4>
             </div>
-            <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+            <div id="collapse4" class="panel-collapse collapse out" style="background-color:lightblue">
               <div class="panel-body">
-                <p>Binning finished &#9989;</p>
+                <p>Binning finished</p>
               </div>
             </div>
           </div>
@@ -567,46 +732,87 @@ setTimeout(function() {
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Expression Analysis</a>
+                  <a data-toggle="collapse" data-parent="#accordion4" href="#collapse5">Expression Analysis</a>
                 </h4>
               </div>
-              <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+              <div id="collapse5" class="panel-collapse collapse in" style="background-color:lightblue">
                 <div class="panel-body">
                   <div class="loader"></div>
 
                 </div>
               </div>
             </div>
+
+          </div>
+        </div>
+
   {% endif %}
   {% if steps|length == 5 %}
   <div class="container">
 
-  <div class="panel-group" id="accordion">
+  <div class="panel-group" id="accordion5">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Step 1 output</a>
+          <a data-toggle="collapse" data-parent="#accordion5" href="#collapse1">Preprocessing &#9989;</a>
         </h4>
       </div>
-      <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+      <div id="collapse1" class="panel-collapse collapse out" style="background-color:lightblue">
         <div class="panel-body">
-          <p>Preprocessing finished &#9989;</p>
 
+
+
+        {%for file in f_files%}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#collapse{{loop.counter}}">{{file.split('/')[-1]}}</a>
+            </h4>
+          </div>
+          <div id="collapse{{loop.counter}}" class="panel-collapse collapse out">
+            <div class="panel-body">
+              <div>
+                <iframe src={{file}} width="900" height="900"></iframe>
+              </div>
+          </div>
         </div>
       </div>
+      {% endfor %}
+
+
+
+
+      </div>
     </div>
+  </div>
 
 
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Step 2 output</a>
+            <a data-toggle="collapse" data-parent="#accordion5" href="#collapse2">Assembly &#9989;</a>
           </h4>
         </div>
-        <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+        <div id="collapse2" class="panel-collapse collapse out" style="background-color:lightblue">
           <div class="panel-body">
 
-           <p>Assembly finished &#9989;</p>
+           <p>Assembly finished </p>
+
+           <div class='center' style="background-color:white;height:700px;width:500px;overflow:auto;border:8px solid white;padding:2%">
+
+              {% for report_out in report_out %}
+              <body>
+                <p><small>{{report_out}}</small></p>
+
+              </body>
+
+              {% endfor %}
+
+
+
+             </div>
+
+
 
           </div>
         </div>
@@ -616,12 +822,20 @@ setTimeout(function() {
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Step 3 output</a>
+              <a data-toggle="collapse" data-parent="#accordion5" href="#collapse3">Annotation &#9989;</a>
             </h4>
           </div>
-          <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+          <div id="collapse3" class="panel-collapse collapse out" style="background-color:lightblue">
             <div class="panel-body">
-              <p>Annotation finished &#9989;</p>
+              <p>Annotation finished</p>
+              <div style="display:inline-block;">
+                <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+              </div>
+              <div style="display:inline-block;">
+                <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+
+              </div>
 
             </div>
           </div>
@@ -631,12 +845,12 @@ setTimeout(function() {
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Step 4 output</a>
+                <a data-toggle="collapse" data-parent="#accordion5" href="#collapse4">Binning &#9989;</a>
               </h4>
             </div>
-            <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+            <div id="collapse4" class="panel-collapse collapse out" style="background-color:lightblue">
               <div class="panel-body">
-                <p>Binning finished &#9989;</p>
+                <p>Binning finished </p>
               </div>
             </div>
           </div>
@@ -645,25 +859,126 @@ setTimeout(function() {
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Step 5 output</a>
+                  <a data-toggle="collapse" data-parent="#accordion5" href="#collapse5">Expression Analysis &#9989;</a>
                 </h4>
               </div>
-              <div id="collapse1" class="panel-collapse collapse in" style="background-color:lightblue">
+              <div id="collapse5" class="panel-collapse collapse out" style="background-color:lightblue">
                 <div class="panel-body">
-                  <p>Expression finished &#9989;</p>
+
+
+                  <p>Expression finished </p>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse85">Interaction</a>
+                      </h4>
+                    </div>
+                    <div id="collapse85" class="panel-collapse collapse out">
+                      <div class="panel-body">
+                        <div>
+                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/counts.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse86">Gene Expression</a>
+                      </h4>
+                    </div>
+                    <div id="collapse86" class="panel-collapse collapse out">
+                      <div class="panel-body">
+                        <div>
+                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/gene_expression.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse87">MAplot</a>
+                      </h4>
+                    </div>
+                    <div id="collapse87" class="panel-collapse collapse out">
+                      <div class="panel-body">
+                        <div>
+                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/ma.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse88">PCA</a>
+                      </h4>
+                    </div>
+                    <div id="collapse88" class="panel-collapse collapse out">
+                      <div class="panel-body">
+                        <div>
+                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/pca.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse89">Sample Distances</a>
+                      </h4>
+                    </div>
+                    <div id="collapse89" class="panel-collapse collapse out">
+                      <div class="panel-body">
+                        <div>
+                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/sample_distances.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                        </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+                  <!--<table class="table table-striped">
+                    <tr>
+                      <th>Counts</th>
+                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/counts.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                    </tr>
+
+                    <tr>
+                      <th>Gene Expression</th>
+                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/gene_expression.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                    </tr>
+
+                    <tr>
+                      <th>MAplot</th>
+                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/ma.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                    </tr>
+
+                    <tr>
+                      <th>PCA</th>
+                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/pca.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                    </tr>
+
+                    <tr>
+                      <th>Sample Distances</th>
+                      </a>
+                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/sample_distances.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                    </tr>
+
+                  </table>-->
+
                 </div>
               </div>
             </div>
   {% endif %}
 
 					</div>
-
-
 				</div>
-
-
-
-
 
 
 </div>
