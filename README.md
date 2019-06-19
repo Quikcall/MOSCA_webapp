@@ -1,7 +1,8 @@
 # MOSCA_webapp
 
 1. *After Flask and MySQL installation here is what you should do:*
-  - Open virtual environment with: $ . venv/bin/activate;
+  - Open virtual environment with: 
+    - $ . venv/bin/activate
   - Open MySQL shell and run following command: $ source <'absolute path for 'mosca_tables.sql''>. This will setup de database for the app, and create a test user for u, whose credetials are: Username: teste, Password:teste ;
   - Go back to linux, then change your directory for the folder that hold de file, *mosca_app.py*;
   - Run the following commands:
