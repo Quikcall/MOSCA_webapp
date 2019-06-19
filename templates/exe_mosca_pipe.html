@@ -176,7 +176,7 @@ padding: 0 0 0 15px;
 <p></p>
 <p></p>
 <p></p>
-<p align="center"><td><a href="/krona" class="btn btn-success">View Krona Plot</a></td>
+	<!--<p align="center"><td><a href="/krona" class="btn btn-success">View Krona Plot</a></td>-->
 </p>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -715,18 +715,79 @@ setTimeout(function() {
         </div>
 
 
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion4" href="#collapse4">Binning &#9989;</a>
-              </h4>
-            </div>
-            <div id="collapse4" class="panel-collapse collapse out" style="background-color:lightblue">
-              <div class="panel-body">
-                <p>Binning finished</p>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion5" href="#collapse4">Binning &#9989;</a>
+            </h4>
+          </div>
+          <div id="collapse4" class="panel-collapse collapse out" style="background-color:lightblue">
+            <div class="panel-body">
+              <p>Binning finished </p>
+
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse100">{{bin_ab[0][0]}}</a>
+                  </h4>
+                </div>
+                <div id="collapse100" class="panel-collapse collapse out">
+                  <div class="panel-body">
+                    <div>
+
+                      <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+
+                         {% for bin in bin_ab[1] %}
+                         <body>
+                           <p><small>{{bin}}</small></p>
+
+                         </body>
+
+                         {% endfor %}
+
+                        </div>
+
+
+                    </div>
+                </div>
               </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse101">{{bin_sum[0][0]}}</a>
+                  </h4>
+                </div>
+                <div id="collapse101" class="panel-collapse collapse out">
+                  <div class="panel-body">
+                    <div>
+
+                      <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+
+                         {% for bin in bin_sum[1] %}
+                         <body>
+                           <p><small>{{bin}}</small></p>
+
+                         </body>
+
+                         {% endfor %}
+
+                        </div>
+
+
+                    </div>
+                </div>
+              </div>
+              </div>
+
+
+
+
             </div>
           </div>
+        </div>
 
 
             <div class="panel panel-default">
@@ -808,9 +869,8 @@ setTimeout(function() {
 
               {% endfor %}
 
-
-
              </div>
+
 
 
 
@@ -851,6 +911,67 @@ setTimeout(function() {
             <div id="collapse4" class="panel-collapse collapse out" style="background-color:lightblue">
               <div class="panel-body">
                 <p>Binning finished </p>
+
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" href="#collapse100">{{bin_ab[0][0]}}</a>
+                    </h4>
+                  </div>
+                  <div id="collapse100" class="panel-collapse collapse out">
+                    <div class="panel-body">
+                      <div>
+
+                        <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+
+                           {% for bin in bin_ab[1] %}
+                           <body>
+                             <p><small>{{bin}}</small></p>
+
+                           </body>
+
+                           {% endfor %}
+
+                          </div>
+
+
+                      </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" href="#collapse101">{{bin_sum[0][0]}}</a>
+                    </h4>
+                  </div>
+                  <div id="collapse101" class="panel-collapse collapse out">
+                    <div class="panel-body">
+                      <div>
+
+                        <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+
+                           {% for bin in bin_sum[1] %}
+                           <body>
+                             <p><small>{{bin}}</small></p>
+
+                           </body>
+
+                           {% endfor %}
+
+                          </div>
+
+
+                      </div>
+                  </div>
+                </div>
+                </div>
+
+
+
+
               </div>
             </div>
           </div>
