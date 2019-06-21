@@ -7,8 +7,6 @@ DROP TABLE IF EXISTS `samples`;
 DROP TABLE IF EXISTS `exe_projects`;
 DROP TABLE IF EXISTS `users`;
 
-
-
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
@@ -19,6 +17,8 @@ CREATE TABLE `projects` (
   `threads` int(11) DEFAULT NULL,
   `sequencing` varchar(50) DEFAULT NULL,
   `quality_scores` varchar(50) DEFAULT NULL,
+  `output_lvl` varchar(50) DEFAULT NULL,
+  `data_type` varchar(50) DEFAULT NULL,
   `preprocessing` tinyint(1) DEFAULT NULL,
   `assembly` tinyint(1) DEFAULT NULL,
   `binning` tinyint(1) DEFAULT NULL,
@@ -47,10 +47,12 @@ CREATE TABLE `projects` (
   `up_taxo_lin` varchar(2000) DEFAULT NULL,
   `up_taxo_id` varchar(500) DEFAULT NULL,
   `up_cross_db_ref` varchar(2000) DEFAULT NULL,
+  `binner` varchar(20) DEFAULT NULL,
   `min_contig_len` int(11) DEFAULT NULL,
   `k_mer_len` int(11) DEFAULT NULL,
+  `marker` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `samples` (
   `id` int(11) NOT NULL,
