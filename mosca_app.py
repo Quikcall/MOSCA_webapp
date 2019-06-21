@@ -12,6 +12,8 @@ from subprocess import Popen, PIPE
 from subprocess import check_output
 import time
 from ast import literal_eval
+import pandas as pd
+import glob
 #from flask.ext.images import resized_img_src
 
 UPLOAD_FOLDER = '/home/mario/shared_folder/MOSCA_app/downloads'
@@ -907,7 +909,7 @@ def run_mosca(id):
             cur.close()
 
             flash('Mosca is running' , 'success')
-            exe_mosca = star_run(id,name,samples_id)
+            exe_mosca = start_run(id,name,samples_id)
             ### definir função para dar trigger no inicio da mosca
             return redirect(url_for('exe_mosca_pipe', id = id, name = name, samples_id=samples_id,exe_mosca=exe_mosca))
     cur.execute('DELETE FROM exe_projects')
@@ -956,19 +958,29 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
             for l in report:
                 report_out.append(l.rstrip('\n'))
 
+
+
+
         if 'binning' in line:
-            bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
+            #bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
+
+            bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/Binning/markerset*')
+            #static/Binning/markerset40.summary'abundance
+            print(bin_files)
             for i in range(len(bin_files)):
-                if bin_files[i][1] != 'None' :
-                    f = open(bin_files[i][0][34:],'r')
-                    print(f)
-                    if i == 1:
-                        bin_ab[0].append(bin_files[i][0][34:].split('/')[-1])
+                if bin_files[i] != 'None' :
+                    if i == 0:
+                        f = open(bin_files[i][-36:],'r')
+                        #f = pd.read_csv(bin_files[i][0][34])
+                        print(f)
+
+                        bin_ab[0].append(bin_files[i][-36:].split('/')[-1])
                         for l in f:
 
                             bin_ab[1].append(l.rstrip('\n'))
                     else:
-                        bin_sum[0].append(bin_files[i][0][34:].split('/')[-1])
+                        f = open(bin_files[i][-34:],'r')
+                        bin_sum[0].append(bin_files[i][-34:].split('/')[-1])
                         for l in f:
 
                             bin_sum[1].append(l.rstrip('\n'))
@@ -977,16 +989,21 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
             print(bin_sum)
 
 
+
+
+
+
         if 'preprocessing' in line:
-            pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
+            #pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
+            pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html')
 
             for file in pre_files:
-                if 'paired' and 'html' in file[0]:
-                    exp = '</h4>'
-                    f_files.append(file[0][33:])
+                #print(file.split('static')[1])
+
+                f_files.append('/static'+file.split('static')[1])
 
 
-            print(pre_files)
+            print('hi',pre_files)
             print(f_files)
 
     print('HI\n',report_out)
@@ -1005,7 +1022,7 @@ def krona2():
 
 
 #EXPRESSION CONSTRUCTION
-def star_run(id, name, samples_id):
+def start_run(id, name, samples_id):
 
     cur = mysql.connection.cursor()
     project = cur.execute("SELECT * FROM projects WHERE id=%s",[id])
@@ -1135,7 +1152,7 @@ def background_process():
         except Exception as e:
             raise
 
-    
+
 
 
 
