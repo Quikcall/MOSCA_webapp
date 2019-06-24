@@ -924,7 +924,7 @@ def run_mosca(id):
 #####################################################################################################################################################
 #@app.route('/start',methods = ['GET', 'POST'])
 def get_shell_script_output_using_communicate():
-
+    subprocess.Popen(['chmod','-x','execute_mosca2'])
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
     print(stdout.decode('utf-8'))
@@ -1109,6 +1109,7 @@ def start_run(id, name, samples_id):
     #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
     file = open('execute_mosca2.sh','w')
     file.write('#!/bin/sh'+'\n')
+    #file.write('chmod -x execute_mosca2.sh'+'\n')
     #ile.write('echo ' + "'{}'".format(exe_mosca))
     file.write("{}".format(exe_mosca))
     #file.write("{}".format(exe_try))
