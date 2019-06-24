@@ -12,9 +12,7 @@ from subprocess import Popen, PIPE
 from subprocess import check_output
 import time
 from ast import literal_eval
-import pandas as pd
 import glob
-#from flask.ext.images import resized_img_src
 
 UPLOAD_FOLDER = '/home/mario/shared_folder/MOSCA_app/downloads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
