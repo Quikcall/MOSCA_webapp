@@ -1,30 +1,63 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<style>
+body {
+  background-image: url("/static/mosca_logo.png");
+  background-repeat: no-repeat;
+  background-size: 900px 900px
+  background-attachment: fixed;
+  background-position: center;
+}
+div.background {
+  background: url(klematis.jpg) repeat;
+  border: 2px solid black;
+}
+
+div.transbox {
+  background-color: #ffffff;
+  opacity: 0.8;
+  filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+div.transbox p {
+  margin: 5%;
+  font-weight: bold;
+  color: #000000;
+  }
+</style>
 <br>
-<div class="jumbotron text-center">
-    <h1>MOSCA</h1>
-    <p class = 'lead'> An automated pipeline for integrated metagenomics and metatranscriptomics data analysis</p>
-    {% if session.logged_in == NULL %}
-    <a href="/login" class="btn btn-primary btn-lg">Server Access</a>
-    {% endif %}
+<div class="transbox">
+  <div class="jumbotron text-center">
+      <h1>MOSCA</h1>
+      <p class = 'lead'> An automated pipeline for integrated metagenomics and metatranscriptomics data analysis</p>
+      {% if session.logged_in == NULL %}
+      <a href="/login" class="btn btn-primary btn-lg">Server Access</a>
+      {% endif %}
+
+  </div>
 
 </div>
-<div class="jumbotron text-center">
-  <h1>About us</h1>
-  <p> MOSCA1 was developed in Python 3 and was tested in an Ubuntu server
-16.04. MOSCA is fully automated to do a complete analysis of raw files gener-
-ated by NGS (from MG and MT experiments), using the default parameters and
 
-tools. Nevertheless, the user can choose at the beginning between different as-
-semblers and can also select the database used for the annotation step. MOSCA
+<div class="transbox">
+  <div class="jumbotron text-center">
+    <h1>About us</h1>
+    <p> MOSCA1 was developed in Python 3 and was tested in an Ubuntu server
+  16.04. MOSCA is fully automated to do a complete analysis of raw files gener-
+  ated by NGS (from MG and MT experiments), using the default parameters and
 
-performs the complete bioinformatics analysis of MG and MT experiments. It
-includes the following major steps that run sequentially: preprocessing, assembly,
-annotation and differential gene expression between multiple samples.</p>
-  <p>MOSCA has been designed to work in a Unix system, and requires a minimum of
-10Gb of RAM, since the assemblers integrated in the workflow, MetaSPAdes
-and Megahit, spend approximately 30Gb and 10Gb of RAM, respectively. All
-integrated software has to be previously installed, and their directories specified.</p>
+  tools. Nevertheless, the user can choose at the beginning between different as-
+  semblers and can also select the database used for the annotation step. MOSCA
+
+  performs the complete bioinformatics analysis of MG and MT experiments. It
+  includes the following major steps that run sequentially: preprocessing, assembly,
+  annotation and differential gene expression between multiple samples.</p>
+    <p>MOSCA has been designed to work in a Unix system, and requires a minimum of
+  10Gb of RAM, since the assemblers integrated in the workflow, MetaSPAdes
+  and Megahit, spend approximately 30Gb and 10Gb of RAM, respectively. All
+  integrated software has to be previously installed, and their directories specified.</p>
+  </div>
+
 </div>
+
 {% endblock %}
