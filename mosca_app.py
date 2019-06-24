@@ -967,7 +967,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
             print(bin_files)
             for i in range(len(bin_files)):
                 if bin_files[i] != 'None' :
-                    if i == 0:
+                    if 'abundance' in bin_files[i] :
                         f = open(bin_files[i][-36:],'r')
                         #f = pd.read_csv(bin_files[i][0][34])
                         print(f)
@@ -1153,8 +1153,8 @@ def background_process():
 
 
 
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
+#def main():
+    #app.run(host='0.0.0.0')
