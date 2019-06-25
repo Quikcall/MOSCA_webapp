@@ -223,7 +223,17 @@ def get_filelist(path):
     # r=root, d=directories, f = files
     for r, d, f in os.walk(path):
         for file in f:
-            files.append((os.path.join(r, file),os.path.join(r, file)))
+            files.append((os.path.join(r, file),os.path.join(file)))
+    return files
+
+def get_filelist2(path):
+    #path = '/media/sf_shared_folder/MOSCA_app/templates'
+    files = []
+    #files.append(('','None'))
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(path):
+        for file in f:
+            files.append((os.path.join(r, file),os.path.join(file)))
     return files
 
 #functions for directories
@@ -287,14 +297,18 @@ class ProjectForm(Form):
     for i in directories:
         drop_out_dir.append((i,i))
 
-    database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
+    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
+
+
+    database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
+    #database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
     #database_dir = StringField('rRNA database directory', [validators.Length(min=1,max=300)])
 
     threads = IntegerField('Number of Threads', default=4)
     #threads = SelectField(choices = [('1','1 thread'),('2','2 threads'),('3','3 threads'),('4','4 threads')])
     sequencing = SelectField('Type of Sequencing', choices = [('PE','Paired-End'),('SE','Single-End')])
     quality_scores = SelectField(choices = [('phred33','phred33'),('phred64','phred64')])
-    output_lvl = SelectField('Output Level', choices = [('min','minimum'),('med','medium'),('max','maximum')])
+    output_lvl = SelectField('Output Level', choices = [('minimum','minimum'),('medium','medium'),('maximum','maximum')])
     data_type = SelectField('Type of data coupled with metagenomics', choices = [('metatranscriptomics ','metatranscriptomics '),('metaproteomics','metaproteomics')])
 
     preprocessing = BooleanField('Preprocessing',render_kw={'checked': True})
@@ -454,7 +468,7 @@ def add_article():
 
 class SamplesForm(Form):
     #directories = get_filelist()
-    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'templates')
+    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files/samples')
     print(drop_out_dir)
     #drop_out_dir.append(('','None'))
     #for i in directories:
@@ -907,9 +921,12 @@ def run_mosca(id):
             cur.close()
 
             flash('Mosca is running' , 'success')
+            name = name + '_' + samples_id
+
             exe_mosca = start_run(id,name,samples_id)
             ### definir função para dar trigger no inicio da mosca
             return redirect(url_for('exe_mosca_pipe', id = id, name = name, samples_id=samples_id,exe_mosca=exe_mosca))
+
     cur.execute('DELETE FROM exe_projects')
     cur.execute('ALTER TABLE exe_projects AUTO_INCREMENT = 1')
         #pipe_samples = form.samples_list.choices
@@ -922,20 +939,23 @@ def run_mosca(id):
 #####################################################################################################################################################
 #@app.route('/start',methods = ['GET', 'POST'])
 def get_shell_script_output_using_communicate():
-    subprocess.Popen(['chmod','-x','execute_mosca2'])
+    #subprocess.Popen(['chmod','-x','execute_mosca2'])
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
     print(stdout.decode('utf-8'))
     #if stderr:
-    #    return str(Exception("Error "+str(stderr)))
+        #return str(Exception("Error "+str(stderr)))
         #raise Exception("Error "+str(stderr))
 
-    #return stdout.decode('utf-8')
+    return stdout.decode('utf-8')
 
 
 def get_shell_script_output_using_check_output():
     stdout = check_output(['./execute_mosca2.sh']).decode('utf-8')
     return stdout
+
+def create_project_directory(dir):
+    subprocess.Popen(['mkdir',dir])
 
 
 #PIPELINE EXECUTION + MONITORING
@@ -952,7 +972,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         print(line)
         steps.append(line.rstrip('\n'))
         if 'assembly' in line :
-            report = open('static/Assembly/quality_control/report.tsv', 'r')
+            report = open('static/{}/Assembly/quality_control/report.tsv'.format(name), 'r')
             for l in report:
                 report_out.append(l.rstrip('\n'))
 
@@ -962,13 +982,13 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         if 'binning' in line:
             #bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
 
-            bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/Binning/markerset*')
+            bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Binning/markerset*'.format(name))
             #static/Binning/markerset40.summary'abundance
             print(bin_files)
             for i in range(len(bin_files)):
                 if bin_files[i] != 'None' :
                     if 'abundance' in bin_files[i] :
-                        f = open(bin_files[i][-36:],'r')
+                        f = open('static'+ bin_files[i].split('static')[1],'r')
                         #f = pd.read_csv(bin_files[i][0][34])
                         print(f)
 
@@ -977,7 +997,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
                             bin_ab[1].append(l.rstrip('\n'))
                     else:
-                        f = open(bin_files[i][-34:],'r')
+                        f = open('static'+ bin_files[i].split('static')[1],'r')
                         bin_sum[0].append(bin_files[i][-34:].split('/')[-1])
                         for l in f:
 
@@ -993,7 +1013,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
         if 'preprocessing' in line:
             #pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
-            pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html')
+            pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html'.format(name))
 
             for file in pre_files:
                 #print(file.split('static')[1])
@@ -1010,17 +1030,19 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
 
 ###############################################################
-@app.route('/annotation/taxonomy', methods = ['GET', 'POST'])
-def krona1():
-    return send_file('static/Annotation/mg_taxonomy.html')
+@app.route('/annotation/taxonomy/<path:name>', methods = ['GET', 'POST'])
+def krona1(name):
+    return send_file('static/{}/Annotation/mg_taxonomy.html'.format(name))
 
-@app.route('/annotation/cogs', methods = ['GET', 'POST'])
-def krona2():
-    return send_file('static/Annotation/mg_cogs.html')
+@app.route('/annotation/cogs/<path:name>', methods = ['GET', 'POST'])
+def krona2(name):
+    return send_file('static/{}/Annotation/mg_cogs.html'.format(name))
 
 
 #EXPRESSION CONSTRUCTION
 def start_run(id, name, samples_id):
+
+    create_project_directory('static/{}'.format(name))
 
     cur = mysql.connection.cursor()
     project = cur.execute("SELECT * FROM projects WHERE id=%s",[id])
@@ -1063,7 +1085,7 @@ def start_run(id, name, samples_id):
 
     db_exp = '--annotation-database\t{}'.format(project['database_dir'])
 
-    out_exp = '--output\t/home/mario/shared_folder/MOSCA_app/MOSCA/Output'
+    out_exp = '--output\t/home/mario/shared_folder/MOSCA_app/static/{}'.format(name)
 
     no_exp = ''
     if not project['preprocessing']:
