@@ -578,14 +578,14 @@ setTimeout(function() {
            <div class="panel-body">
              <p>Annotation finished</p>
              <div style="display:inline-block;">
-               <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+               <p align="center"><td><a href="{{'/annotation/taxonomy/%s'%name}}" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
 
              </div>
              <div style="display:inline-block;">
-               <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+               <p align="center"><td><a href="{{'/annotation/cogs/%s'%name}}" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
 
              </div>
-
            </div>
          </div>
        </div>
@@ -701,14 +701,14 @@ setTimeout(function() {
             <div class="panel-body">
               <p>Annotation finished</p>
               <div style="display:inline-block;">
-                <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+                <p align="center"><td><a href="{{'/annotation/taxonomy/%s'%name}}" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
 
               </div>
               <div style="display:inline-block;">
-                <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+                <p align="center"><td><a href="{{'/annotation/cogs/%s'%name}}" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
 
               </div>
-
 
             </div>
           </div>
@@ -736,7 +736,7 @@ setTimeout(function() {
                   <div class="panel-body">
                     <div>
 
-                      <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+                      <div class='center' style="background-color:white;height:300px;width:900px;overflow:auto;border:8px solid white;padding:2%">
 
                          {% for bin in bin_ab[1] %}
                          <body>
@@ -764,7 +764,7 @@ setTimeout(function() {
                   <div class="panel-body">
                     <div>
 
-                      <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+                      <div class='center' style="background-color:white;height:300px;width:900px;overflow:auto;border:8px solid white;padding:2%">
 
                          {% for bin in bin_sum[1] %}
                          <body>
@@ -889,11 +889,12 @@ setTimeout(function() {
             <div class="panel-body">
               <p>Annotation finished</p>
               <div style="display:inline-block;">
-                <p align="center"><td><a href="/annotation/taxonomy" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
+
+                <p align="center"><td><a href="{{'/annotation/taxonomy/%s'%name}}" target="_blank" class="btn btn-success">View Krona Taxonomy Plot</a></td>
 
               </div>
               <div style="display:inline-block;">
-                <p align="center"><td><a href="/annotation/cogs" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
+                <p align="center"><td><a href="{{'/annotation/cogs/%s'%name}}" target="_blank" class="btn btn-success">View Krona Cogs Plot</a></td>
 
               </div>
 
@@ -923,7 +924,7 @@ setTimeout(function() {
                     <div class="panel-body">
                       <div>
 
-                        <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+                        <div class='center' style="background-color:white;height:300px;width:900px;overflow:auto;border:8px solid white;padding:2%">
 
                            {% for bin in bin_ab[1] %}
                            <body>
@@ -951,7 +952,7 @@ setTimeout(function() {
                     <div class="panel-body">
                       <div>
 
-                        <div class='center' style="background-color:white;height:500px;width:900px;overflow:auto;border:8px solid white;padding:2%">
+                        <div class='center' style="background-color:white;height:300px;width:900px;overflow:auto;border:8px solid white;padding:2%">
 
                            {% for bin in bin_sum[1] %}
                            <body>
@@ -997,7 +998,7 @@ setTimeout(function() {
                     <div id="collapse85" class="panel-collapse collapse out">
                       <div class="panel-body">
                         <div>
-                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/counts.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                          <img src= {{ url_for('static', filename = '%s/Metatranscriptomics/counts.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
                         </div>
                     </div>
                   </div>
@@ -1011,7 +1012,7 @@ setTimeout(function() {
                     <div id="collapse86" class="panel-collapse collapse out">
                       <div class="panel-body">
                         <div>
-                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/gene_expression.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                          <img src= {{ url_for('static', filename =  '%s/Metatranscriptomics/gene_expression.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
                         </div>
                     </div>
                   </div>
@@ -1025,7 +1026,7 @@ setTimeout(function() {
                     <div id="collapse87" class="panel-collapse collapse out">
                       <div class="panel-body">
                         <div>
-                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/ma.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                          <img src= {{ url_for('static', filename = '%s/Metatranscriptomics/ma.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
                         </div>
                     </div>
                   </div>
@@ -1039,7 +1040,7 @@ setTimeout(function() {
                     <div id="collapse88" class="panel-collapse collapse out">
                       <div class="panel-body">
                         <div>
-                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/pca.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                          <img src= {{ url_for('static', filename = '%s/Metatranscriptomics/pca.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
                         </div>
                     </div>
                   </div>
@@ -1053,7 +1054,7 @@ setTimeout(function() {
                     <div id="collapse89" class="panel-collapse collapse out">
                       <div class="panel-body">
                         <div>
-                          <img src= {{ url_for('static', filename = 'Metatranscriptomics/sample_distances.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
+                          <img src= {{ url_for('static', filename = '%s/Metatranscriptomics/sample_distances.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0">                        </div>
                         </div>
                     </div>
                   </div>
@@ -1067,28 +1068,28 @@ setTimeout(function() {
                   <!--<table class="table table-striped">
                     <tr>
                       <th>Counts</th>
-                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/counts.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                      <td><img src= {{ url_for('static', filename = '%s/Metatranscriptomics/counts.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
                     </tr>
 
                     <tr>
                       <th>Gene Expression</th>
-                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/gene_expression.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                      <td><img src= {{ url_for('static', filename = '%s/Metatranscriptomics/gene_expression.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
                     </tr>
 
                     <tr>
                       <th>MAplot</th>
-                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/ma.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                      <td><img src= {{ url_for('static', filename = '%s/Metatranscriptomics/ma.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
                     </tr>
 
                     <tr>
                       <th>PCA</th>
-                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/pca.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                      <td><img src= {{ url_for('static', filename = '%s/Metatranscriptomics/pca.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
                     </tr>
 
                     <tr>
                       <th>Sample Distances</th>
                       </a>
-                      <td><img src= {{ url_for('static', filename = 'Metatranscriptomics/sample_distances.jpeg') }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
+                      <td><img src= {{ url_for('static', filename = '%s/Metatranscriptomics/sample_distances.jpeg'%name) }} width="450" height="450" alt="previous" title="Previous" border="0"></td>
                     </tr>
 
                   </table>-->
