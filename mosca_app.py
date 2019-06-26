@@ -1000,7 +1000,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'Pass'
         print('\n'+state+'\n')
 
-        get_shell_script_output_using_communicate()
+        subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
 
     else:
@@ -1170,7 +1170,7 @@ def start_run(id, name, samples_id):
     #mosca_exe = '/mnt/HDDStorage/jsequeira/MOSCA/scripts/mosca.py'
 
     exe_mosca = 'python\t{}\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(mosca_exe,file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
-    #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
+    #(exe_mosca.split(subprocess.run'\t'), stdout=PIPE, check = True)
 
     #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
     file = open('execute_mosca2.sh','w')
