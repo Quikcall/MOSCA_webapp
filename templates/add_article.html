@@ -393,9 +393,9 @@
             <div class="form-group" >
             {{render_field(form.assembler, class_="form-control") }}
 
-            {{render_field(form.memory, class_="form-control") }}
+            {{render_field(form.memory) }}
 
-            {{render_field(form.k_mer_sizes, class_="form-control") }}
+            {{render_field(form.k_mer_sizes) }}
             <small>*If using MEGAHIT, minimum kmer is 15 and maximum is 255, with a minimum increment between kmers of 28. Default kmer list is: 21,29,39,59,79,99,119,141</small><p></p>
             <small>*If using MetaSPAdes, maximum kmer is 127. Default kmer list is 21,33,55</small>
 
