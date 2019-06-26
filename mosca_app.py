@@ -35,6 +35,7 @@ app.config['MYSQL_CURSORCLASS']='DictCursor'
 #init mySQL
 mysql = MySQL(app)
 
+state = 'True'
 #Articles = Articles()
 
 @app.route('/')
@@ -297,8 +298,8 @@ class ProjectForm(Form):
     for i in directories:
         drop_out_dir.append((i,i))
 
-    #database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
-    database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
+    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
+    #database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
 
 
 
@@ -311,7 +312,7 @@ class ProjectForm(Form):
     sequencing = SelectField('Type of Sequencing', choices = [('PE','Paired-End'),('SE','Single-End')])
     quality_scores = SelectField(choices = [('phred33','phred33'),('phred64','phred64')])
     output_lvl = SelectField('Output Level', choices = [('minimum','minimum'),('medium','medium'),('maximum','maximum')])
-    data_type = SelectField('Type of data coupled with metagenomics', choices = [('metatranscriptomics ','metatranscriptomics '),('metaproteomics','metaproteomics')])
+    data_type = SelectField('Type of data coupled with metagenomics', choices = [('metatranscriptomics','metatranscriptomics'),('metaproteomics','metaproteomics')])
 
     preprocessing = BooleanField('Preprocessing',render_kw={'checked': True})
     assembly = BooleanField('Assembly',render_kw={'checked': True})
@@ -470,7 +471,7 @@ def add_article():
 
 class SamplesForm(Form):
     #directories = get_filelist()
-    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files/samples')
+    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files')
     print(drop_out_dir)
     #drop_out_dir.append(('','None'))
     #for i in directories:
@@ -924,8 +925,9 @@ def run_mosca(id):
 
             flash('Mosca is running' , 'success')
             name = name + '_' + samples_id
+            exe_mosca=start_run(id,name,samples_id)
 
-            exe_mosca = start_run(id,name,samples_id)
+            #exe_mosca = start_run(id,name,samples_id)
             ### definir função para dar trigger no inicio da mosca
             return redirect(url_for('exe_mosca_pipe', id = id, name = name, samples_id=samples_id,exe_mosca=exe_mosca))
 
@@ -945,12 +947,11 @@ def get_shell_script_output_using_communicate():
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
     print(stdout.decode('utf-8'))
-    #if stderr:
-        #return str(Exception("Error "+str(stderr)))
+    if stderr:
+        print(str(Exception("Error "+str(stderr))))
         #raise Exception("Error "+str(stderr))
 
-    return stdout.decode('utf-8')
-
+    #return stdout.decode('utf-8')
 
 def get_shell_script_output_using_check_output():
     stdout = check_output(['./execute_mosca2.sh']).decode('utf-8')
@@ -964,11 +965,11 @@ def subprocess_with_exp(expression):
     print(expression.split('\t'))
     session = subprocess.Popen(expression.split('\t'), stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
-    print(stdout.decode('utf-8'))
+    #print(stdout.decode('utf-8'))
     #if stderr:
         #return str(Exception("Error "+str(stderr)))
         #raise Exception("Error "+str(stderr))
-    #return stdout.decode('utf-8')
+    return stdout.decode('utf-8')
 
 
 
@@ -976,12 +977,24 @@ def subprocess_with_exp(expression):
 @app.route('/exe_mosca_pipe/<path:id>/<path:name>/<path:samples_id>/<path:exe_mosca>', methods = ['GET', 'POST'])
 @is_logged_in
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
+
+
     output = open('file.txt','r')
     steps = []
     report_out = []
     bin_ab = [[],[]]
     bin_sum = [[],[]]
     f_files = []
+
+
+    global state
+    print('\n'+state+'\n')
+    if state == 'True':
+        state = 'False'
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum), get_shell_script_output_using_communicate()
+
+
+
     for line in output:
         print(line)
         steps.append(line.rstrip('\n'))
@@ -1037,6 +1050,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
             print('hi',pre_files)
             print(f_files)
+            state = 'True'
 
     print('HI\n',report_out)
     print(os.path.join(app.instance_path)[0:-8])
@@ -1129,17 +1143,20 @@ def start_run(id, name, samples_id):
         res.append(s['samples_condition'])
     scond_exp=','.join(res)
     #print(scond_exp)
-    scond_exp='--conditions '+scond_exp
+    scond_exp='--conditions\t'+scond_exp
 
     thr_exp = '--threads\t{}'.format(project['threads'])
 
     memory_exp = '--memory\t{}'.format(project['memory'])
 
-    gene_set_exp = '--marker-gene-set\t{}'.format(project['marker'])
+    gene_set_exp = '--marker-gene-set\t{}'.format(project['marker'].rstrip(' '))
 
     #exe_mosca = 'python MOSCA/scripts/mosca.py\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
-    exe_mosca = 'mosca\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
+    mosca_exe = 'MOSCA/scripts/mosca.py'
+    #mosca_exe = '/mnt/HDDStorage/jsequeira/MOSCA/scripts/mosca.py'
 
+    exe_mosca = 'python\t{}\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(mosca_exe,file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
+    #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
     #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
     file = open('execute_mosca2.sh','w')
@@ -1158,9 +1175,12 @@ def start_run(id, name, samples_id):
     #print(exe_mosca)
     #print(background_process())
     #get_shell_script_output_using_communicate()
-    subprocess_with_exp(exe_mosca)
+    #print(os.path.join(app.instance_path))
+    #get_shell_script_output_using_communicate()
+    #subprocess_with_exp(exe_mosca)
 
     return exe_mosca
+
 
 
 @app.route('/background_process')
