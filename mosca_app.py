@@ -297,7 +297,9 @@ class ProjectForm(Form):
     for i in directories:
         drop_out_dir.append((i,i))
 
-    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
+    #database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
+    database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
+
 
 
     database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
