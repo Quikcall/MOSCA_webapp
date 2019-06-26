@@ -992,7 +992,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'False'
         print('\n'+state+'\n')
 
-        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
 
         print('\n'+state+'\n')
 
@@ -1000,7 +1000,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'Pass'
         print('\n'+state+'\n')
 
-        subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
+        get_shell_script_output_using_communicate()
 
 
     else:
@@ -1066,7 +1066,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         print('HI\n',report_out)
         print(os.path.join(app.instance_path)[0:-8])
 
-        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
 
 ###############################################################
 @app.route('/annotation/taxonomy/<path:name>', methods = ['GET', 'POST'])
