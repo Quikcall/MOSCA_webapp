@@ -1099,9 +1099,15 @@ setTimeout(function() {
             </div>
   {% endif %}
 
-					</div>
-				</div>
-
+	</div>
+	</div>
+  {% if state != 'True' %}
+          <script type="text/javascript">
+          setTimeout(function() {
+            location.reload(true);
+          }, 0);
+          </script>
+        {% endif %}
 
 </div>
 {% endblock %}
