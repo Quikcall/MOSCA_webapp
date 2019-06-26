@@ -1000,7 +1000,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'Pass'
         print('\n'+state+'\n')
 
-        get_shell_script_output_using_communicate()
+        subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
 
     else:
