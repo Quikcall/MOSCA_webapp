@@ -474,7 +474,7 @@ def add_article():
 class SamplesForm(Form):
     #directories = get_filelist()
     drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files')
-    print(drop_out_dir)
+    #print(drop_out_dir)
     #drop_out_dir.append(('','None'))
     #for i in directories:
     #    drop_out_dir.append((i,i))
