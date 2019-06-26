@@ -300,8 +300,8 @@ class ProjectForm(Form):
     database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
 
 
-    #database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
-    database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
+    database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
+    #database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
     #database_dir = StringField('rRNA database directory', [validators.Length(min=1,max=300)])
 
     threads = IntegerField('Number of Threads', default=4)
@@ -321,7 +321,7 @@ class ProjectForm(Form):
 
     #ASSEMBLY
     assembler = SelectField('Assembler', choices = [('metaSPAdes','metaSPAdes'),('MEGAHIT','MEGAHIT')])
-    memory = IntegerField('Memory (in bytes) for assembly', validators=[validators.Optional()])
+    memory = IntegerField('Memory (in bytes) for assembly',validators=[validators.Optional()])
     k_mer_sizes = StringField('K mer sizes -  List of kmers for assembly (separated by comma), must be odd numbers. If empty default values will be used', validators=[validators.Optional()])
     #default for MegaHIT = [21,29,39,59,79,99,119,141]
 
@@ -468,7 +468,7 @@ def add_article():
 
 class SamplesForm(Form):
     #directories = get_filelist()
-    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files')
+    drop_out_dir = get_filelist(os.path.join(app.instance_path)[0:-8]+'input_files/samples')
     print(drop_out_dir)
     #drop_out_dir.append(('','None'))
     #for i in directories:
@@ -957,6 +957,18 @@ def get_shell_script_output_using_check_output():
 def create_project_directory(dir):
     subprocess.Popen(['mkdir',dir])
 
+def subprocess_with_exp(expression):
+    print(expression)
+    print(expression.split('\t'))
+    session = subprocess.Popen(expression.split('\t'), stdout=PIPE, stderr=PIPE)
+    stdout, stderr = session.communicate()
+    print(stdout.decode('utf-8'))
+    #if stderr:
+        #return str(Exception("Error "+str(stderr)))
+        #raise Exception("Error "+str(stderr))
+    #return stdout.decode('utf-8')
+
+
 
 #PIPELINE EXECUTION + MONITORING
 @app.route('/exe_mosca_pipe/<path:id>/<path:name>/<path:samples_id>/<path:exe_mosca>', methods = ['GET', 'POST'])
@@ -1077,15 +1089,15 @@ def start_run(id, name, samples_id):
 
     print(project)
     if project['sequencing']=='PE':
-        st_exp = '--sequencing-technology paired'
+        st_exp = '--sequencing-technology\tpaired'
     if project['sequencing']=='SE':
-        st_exp = '--sequencing-technology single'
+        st_exp = '--sequencing-technology\tsingle'
 
     ass_exp = '--assembler\t{}'.format(project['assembler'].lower())
 
     db_exp = '--annotation-database\t{}'.format(project['database_dir'])
 
-    out_exp = '--output\t/home/mario/shared_folder/MOSCA_app/static/{}'.format(name)
+    out_exp = '--output\t{}static/{}'.format(os.path.join(app.instance_path)[0:-8],name)
 
     no_exp = ''
     if not project['preprocessing']:
@@ -1123,7 +1135,8 @@ def start_run(id, name, samples_id):
 
     gene_set_exp = '--marker-gene-set\t{}'.format(project['marker'])
 
-    exe_mosca = 'python MOSCA/scripts/mosca.py\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
+    #exe_mosca = 'python MOSCA/scripts/mosca.py\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
+    exe_mosca = 'mosca\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
 
 
     #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
@@ -1142,7 +1155,8 @@ def start_run(id, name, samples_id):
     #exe_mosca = get_shell_script_output_using_communicate()
     #print(exe_mosca)
     #print(background_process())
-    get_shell_script_output_using_communicate()
+    #get_shell_script_output_using_communicate()
+    subprocess_with_exp(exe_mosca)
 
     return exe_mosca
 
