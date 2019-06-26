@@ -8,4 +8,6 @@ apt-get install default-libmysqlclient-dev
 pip install flask_mysqldb
 pip install wtforms
 pip install passlib
+pip install mysql-connector
 mysql -u root -p -e 'source mosca_tables.sql'
+
