@@ -15,6 +15,8 @@ parser.add_argument("-u","--username", type=str,
 parser.add_argument("-p","--password", type=str,
                     help="Password for new user")
 
+parser.add_argument("-c","--command" type=str, help="action to perform", default = "add")
+
 args = parser.parse_args()
 
 cnx = mysql.connector.connect(
@@ -39,5 +41,18 @@ def insert_new_user(name, username, password, email=''):
     #close connection
     cur.close()
 
+def remove_user(username):
+  cur = cnx.cursor(dictionary=True)
+  cur.execute('DELETE FROM users WHERE username=%s',username)
+  # COMIT to db
+  cnx.commit()
+  #close connection
+  cur.close()
 
-insert_new_user(args.name, args.username, args.password,args.email)
+  
+if args.command == 'add':
+  insert_new_user(args.name, args.username, args.password,args.email)
+elif args.command=='remove':
+  remove_user(args.username)
+else:
+  print('Command is either add or remove')
