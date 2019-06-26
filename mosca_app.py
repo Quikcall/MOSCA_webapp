@@ -184,6 +184,8 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
+    global state
+    state = 'True'
     #print(get_filelist())
     # Create cursor
     cur = mysql.connection.cursor()
@@ -298,13 +300,13 @@ class ProjectForm(Form):
     for i in directories:
         drop_out_dir.append((i,i))
 
-    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/Databases')
+    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
     #database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
 
 
 
-    #database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
-    database_dir = SelectField('Database file for Annotation ', default=[('/Mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/Mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
+    database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
+    #database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
     #database_dir = StringField('rRNA database directory', [validators.Length(min=1,max=300)])
 
     threads = IntegerField('Number of Threads', default=4)
@@ -872,6 +874,8 @@ class choose_samples(Form):
 @app.route('/run_mosca/<string:id>', methods = ['GET', 'POST'])
 @is_logged_in
 def run_mosca(id):
+    global state
+    state = 'True'
     form = choose_samples(request.form)
     form.samples_list.choices = []
     samples = []
@@ -947,8 +951,8 @@ def get_shell_script_output_using_communicate():
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
     print(stdout.decode('utf-8'))
-    if stderr:
-        print(str(Exception("Error "+str(stderr))))
+    #if stderr:
+        #print(str(Exception("Error "+str(stderr))))
         #raise Exception("Error "+str(stderr))
 
     #return stdout.decode('utf-8')
@@ -977,85 +981,92 @@ def subprocess_with_exp(expression):
 @app.route('/exe_mosca_pipe/<path:id>/<path:name>/<path:samples_id>/<path:exe_mosca>', methods = ['GET', 'POST'])
 @is_logged_in
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
-
-
+    global state
     output = open('file.txt','r')
     steps = []
     report_out = []
     bin_ab = [[],[]]
     bin_sum = [[],[]]
     f_files = []
-
-
-    global state
-    print('\n'+state+'\n')
     if state == 'True':
         state = 'False'
-        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum), subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
+        print('\n'+state+'\n')
+
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
+
+        print('\n'+state+'\n')
+
+    elif state == 'False':
+        state = 'Pass'
+        print('\n'+state+'\n')
+
+        get_shell_script_output_using_communicate()
 
 
+    else:
+        print('\n'+state+'\n')
 
-    for line in output:
-        print(line)
-        steps.append(line.rstrip('\n'))
-        if 'assembly' in line :
-            report = open('static/{}/Assembly/quality_control/report.tsv'.format(name), 'r')
-            for l in report:
-                report_out.append(l.rstrip('\n'))
-
-
-
-
-        if 'binning' in line:
-            #bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
-
-            bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Binning/markerset*'.format(name))
-            #static/Binning/markerset40.summary'abundance
-            print(bin_files)
-            for i in range(len(bin_files)):
-                if bin_files[i] != 'None' :
-                    if 'abundance' in bin_files[i] :
-                        f = open('static'+ bin_files[i].split('static')[1],'r')
-                        #f = pd.read_csv(bin_files[i][0][34])
-                        print(f)
-
-                        bin_ab[0].append(bin_files[i][-36:].split('/')[-1])
-                        for l in f:
-
-                            bin_ab[1].append(l.rstrip('\n'))
-                    else:
-                        f = open('static'+ bin_files[i].split('static')[1],'r')
-                        bin_sum[0].append(bin_files[i][-34:].split('/')[-1])
-                        for l in f:
-
-                            bin_sum[1].append(l.rstrip('\n'))
-                    #f = open()
-            print(bin_ab)
-            print(bin_sum)
+        for line in output:
+            print(line)
+            steps.append(line.rstrip('\n'))
+            if 'assembly' in line :
+                report = open('static/{}/Assembly/quality_control/report.tsv'.format(name), 'r')
+                for l in report:
+                    report_out.append(l.rstrip('\n'))
 
 
 
 
+            if 'binning' in line:
+                #bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
+
+                bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Binning/markerset*'.format(name))
+                #static/Binning/markerset40.summary'abundance
+                print(bin_files)
+                for i in range(len(bin_files)):
+                    if bin_files[i] != 'None' :
+                        if 'abundance' in bin_files[i] :
+                            f = open('static'+ bin_files[i].split('static')[1],'r')
+                            #f = pd.read_csv(bin_files[i][0][34])
+                            print(f)
+
+                            bin_ab[0].append(bin_files[i][-36:].split('/')[-1])
+                            for l in f:
+
+                                bin_ab[1].append(l.rstrip('\n'))
+                        else:
+                            f = open('static'+ bin_files[i].split('static')[1],'r')
+                            bin_sum[0].append(bin_files[i][-34:].split('/')[-1])
+                            for l in f:
+
+                                bin_sum[1].append(l.rstrip('\n'))
+                        #f = open()
+                print(bin_ab)
+                print(bin_sum)
 
 
-        if 'preprocessing' in line:
-            #pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
-            pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html'.format(name))
-
-            for file in pre_files:
-                #print(file.split('static')[1])
-
-                f_files.append('/static'+file.split('static')[1])
 
 
-            print('hi',pre_files)
-            print(f_files)
-            state = 'True'
 
-    print('HI\n',report_out)
-    print(os.path.join(app.instance_path)[0:-8])
 
-    return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
+            if 'preprocessing' in line:
+                #pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
+                pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html'.format(name))
+
+                for file in pre_files:
+                    #print(file.split('static')[1])
+
+                    f_files.append('/static'+file.split('static')[1])
+
+
+                print('hi',pre_files)
+                print(f_files)
+                state = 'True'
+
+        print('HI\n',report_out)
+        print(os.path.join(app.instance_path)[0:-8])
+
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum)
 
 ###############################################################
 @app.route('/annotation/taxonomy/<path:name>', methods = ['GET', 'POST'])
@@ -1069,6 +1080,9 @@ def krona2(name):
 
 #EXPRESSION CONSTRUCTION
 def start_run(id, name, samples_id):
+    global state
+    state = 'True'
+
 
     create_project_directory('static/{}'.format(name))
 
