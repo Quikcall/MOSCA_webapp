@@ -321,8 +321,8 @@ class ProjectForm(Form):
 
     #ASSEMBLY
     assembler = SelectField('Assembler', choices = [('metaSPAdes','metaSPAdes'),('MEGAHIT','MEGAHIT')])
-    memory = IntegerField('Memory (in bytes) for assembly')
-    k_mer_sizes = StringField('K mer sizes -  List of kmers for assembly (separated by comma), must be odd numbers. If empty default values will be used')
+    memory = IntegerField('Memory (in bytes) for assembly', validators=[validators.Optional()])
+    k_mer_sizes = StringField('K mer sizes -  List of kmers for assembly (separated by comma), must be odd numbers. If empty default values will be used', validators=[validators.Optional()])
     #default for MegaHIT = [21,29,39,59,79,99,119,141]
 
     #MetaQUAST
