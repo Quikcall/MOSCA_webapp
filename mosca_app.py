@@ -991,7 +991,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     print('\n'+state+'\n')
     if state == 'True':
         state = 'False'
-        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum), get_shell_script_output_using_communicate()
+        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum), subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
 
 
