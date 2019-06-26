@@ -43,7 +43,7 @@ def insert_new_user(name, username, password, email=''):
 
 def remove_user(username):
   cur = cnx.cursor(dictionary=True)
-  cur.execute('DELETE FROM users WHERE username=%s',username)
+  cur.execute('DELETE FROM users WHERE username=%s',[username])
   # COMIT to db
   cnx.commit()
   #close connection
