@@ -326,7 +326,7 @@ class ProjectForm(Form):
 
     #ASSEMBLY
     assembler = SelectField('Assembler', choices = [('metaSPAdes','metaSPAdes'),('MEGAHIT','MEGAHIT')])
-    memory = IntegerField('Memory (in bytes) for assembly',validators=[validators.Optional()])
+    memory = StringField('Memory (in bytes) for assembly',validators=[validators.Optional()])
     k_mer_sizes = StringField('K mer sizes -  List of kmers for assembly (separated by comma), must be odd numbers. If empty default values will be used', validators=[validators.Optional()])
     #default for MegaHIT = [21,29,39,59,79,99,119,141]
 
@@ -450,6 +450,10 @@ def add_article():
         k_mer_len = form.k_mer_len.data
         marker = form.marker.data
 
+        if not memory:
+            memory = 'None'
+        #if not k_mer_sizes:
+            #k_mer_sizes = 'None'
         #create CURSOR
         cur = mysql.connection.cursor()
         #execute
@@ -950,12 +954,12 @@ def get_shell_script_output_using_communicate():
     #subprocess.Popen(['chmod','-x','execute_mosca2'])
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
-    #print(stdout.decode('utf-8'))
+    print(stdout.decode('utf-8'))
     #if stderr:
         #print(str(Exception("Error "+str(stderr))))
         #raise Exception("Error "+str(stderr))
 
-    return stdout.decode('utf-8')
+    #return stdout.decode('utf-8')
 
 def get_shell_script_output_using_check_output():
     stdout = check_output(['./execute_mosca2.sh']).decode('utf-8')
@@ -1000,9 +1004,8 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'Pass'
         print('\n'+state+'\n')
 
-        #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
-        #get_shell_script_output_using_communicate()
-        subprocess.run(exe_mosca.split('\t'),stderr=subprocess.STDOUT,check=True)
+        get_shell_script_output_using_communicate()
+
 
     else:
         print('\n'+state+'\n')
@@ -1171,7 +1174,7 @@ def start_run(id, name, samples_id):
     #mosca_exe = '/mnt/HDDStorage/jsequeira/MOSCA/scripts/mosca.py'
 
     exe_mosca = 'python\t{}\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(mosca_exe,file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
-    #(exe_mosca.split(subprocess.run'\t'), stdout=PIPE, check = True)
+    #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
     #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
     file = open('execute_mosca2.sh','w')
