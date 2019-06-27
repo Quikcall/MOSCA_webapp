@@ -950,12 +950,12 @@ def get_shell_script_output_using_communicate():
     #subprocess.Popen(['chmod','-x','execute_mosca2'])
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
-    print(stdout.decode('utf-8'))
+    #print(stdout.decode('utf-8'))
     #if stderr:
         #print(str(Exception("Error "+str(stderr))))
         #raise Exception("Error "+str(stderr))
 
-    #return stdout.decode('utf-8')
+    return stdout.decode('utf-8')
 
 def get_shell_script_output_using_check_output():
     stdout = check_output(['./execute_mosca2.sh']).decode('utf-8')
