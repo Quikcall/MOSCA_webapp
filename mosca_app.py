@@ -326,7 +326,7 @@ class ProjectForm(Form):
 
     #ASSEMBLY
     assembler = SelectField('Assembler', choices = [('metaSPAdes','metaSPAdes'),('MEGAHIT','MEGAHIT')])
-    memory = StringField('Memory (in bytes) for assembly',validators=[validators.Optional()])
+    memory = IntegerField('Memory (in bytes) for assembly',validators=[validators.Optional()])
     k_mer_sizes = StringField('K mer sizes -  List of kmers for assembly (separated by comma), must be odd numbers. If empty default values will be used', validators=[validators.Optional()])
     #default for MegaHIT = [21,29,39,59,79,99,119,141]
 
@@ -450,10 +450,6 @@ def add_article():
         k_mer_len = form.k_mer_len.data
         marker = form.marker.data
 
-        if not memory:
-            memory = 'None'
-        #if not k_mer_sizes:
-            #k_mer_sizes = 'None'
         #create CURSOR
         cur = mysql.connection.cursor()
         #execute
@@ -1165,7 +1161,10 @@ def start_run(id, name, samples_id):
 
     thr_exp = '--threads\t{}'.format(project['threads'])
 
-    memory_exp = '--memory\t{}'.format(project['memory'])
+    if not project['memory']:
+        memory_exp = '--memory\tNone'
+    else:
+        memory_exp = '--memory\t{}'.format(project['memory'])
 
     gene_set_exp = '--marker-gene-set\t{}'.format(project['marker'].rstrip(' '))
 
