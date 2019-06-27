@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 import os
 import ast
 import subprocess
-from subprocess import Popen, PIPE, capture_output
+from subprocess import Popen, PIPE
 from subprocess import check_output
 import time
 from ast import literal_eval
@@ -1002,7 +1002,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
         #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
         #get_shell_script_output_using_communicate()
-        subprocess.run(exe_mosca.split('\t'),stdout=PIPE,stderr=subprocess.STDOUT,capture_output=True)
+        subprocess.run(exe_mosca.split('\t'),stdout=PIPE,stderr=subprocess.STDOUT,check=True)
 
     else:
         print('\n'+state+'\n')
