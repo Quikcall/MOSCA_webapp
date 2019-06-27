@@ -1001,8 +1001,8 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         print('\n'+state+'\n')
 
         #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
-        get_shell_script_output_using_communicate()
-
+        #get_shell_script_output_using_communicate()
+        subprocess.run(exe_mosca.split('\t'),stdout=PIPE,stderr=subprocess.STDOUT,capture_output=True)
 
     else:
         print('\n'+state+'\n')
