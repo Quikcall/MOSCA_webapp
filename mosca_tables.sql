@@ -23,7 +23,7 @@ CREATE TABLE `projects` (
   `assembly` tinyint(1) DEFAULT NULL,
   `binning` tinyint(1) DEFAULT NULL,
   `assembler` varchar(50) DEFAULT NULL,
-  `memory` varchar(20) DEFAULT NULL,
+  `memory` int(11) DEFAULT NULL,
   `k_mer_sizes` varchar(300) DEFAULT NULL,
   `m` int(11) DEFAULT NULL,
   `alignment_method` varchar(50) DEFAULT NULL,
