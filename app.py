@@ -962,7 +962,7 @@ def create_monitor_file(dir):
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     global state
     #output = open('file.txt','r')
-    output = open('static/{}/Assembly/grinder-reads/quality_control/report.tsv'.format(name),'r')
+    output = open('static/{}/monitorization_report.txt'.format(name),'r')
 
     print(output)
     steps = []
@@ -986,7 +986,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
             #print(line)
             steps.append(line.rstrip('\n'))
             if 'assembly' in line :
-                report = open('static/{}/Assembly/quality_control/report.tsv'.format(name), 'r')
+                report = open('static/{}/Assembly/grinder-reads/quality_control/report.tsv'.format(name), 'r')
                 for l in report:
                     report_out.append(l.rstrip('\n'))
 
