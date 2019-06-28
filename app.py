@@ -585,7 +585,7 @@ def edit_sample(id):
     p_id = sample['id']
     s_name = sample['samples_name']
     file=sample['mg_sample1'].split('/')[-1]
-    print(file)
+    #print(file)
     form.samples_name.data = sample['samples_name']
     form.samples_condition.data = sample['samples_condition']
     #form.mg_path.data = sample['mg_path']
@@ -721,7 +721,7 @@ def edit_article(id):
     form.k_mer_len.data = project['k_mer_len']
     form.marker.data = project['marker']
 
-    print(form.up_names_tax.data)
+    #print(form.up_names_tax.data)
     if request.method == 'POST' and form.validate():
 
         project_name = request.form['project_name']
@@ -735,6 +735,11 @@ def edit_article(id):
         quality_scores = request.form['quality_scores']
         output_lvl = request.form['output_lvl']
         data_type = request.form['data_type']
+
+        preprocessing = request.form['preprocessing']
+        assembly = request.form['assembly']
+        binning = request.form['binning']
+
         #ASSEMBLY
         assembler = request.form['assembler']
         memory = request.form['memory']
@@ -790,7 +795,7 @@ def edit_article(id):
         #cur.execute('INSERT INTO projects(project_name,author,description,database_dir,threads,sequencing,quality_scores, output_lvl, data_type, preprocessing, assembly, binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options, train, up_names_tax, up_sequences, up_function, up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner, min_contig_len, k_mer_len,marker) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing, assembly, binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options, train, str(up_names_tax), str(up_sequences), str(up_function), str(up_miscellaneous),str(up_interaction),str(up_expression),str(up_gene_ont),str(up_chebi),str(up_path_biot),str(up_cell_loc),str(up_ptm),str(up_structure),str(up_pubs),str(up_date),str(up_family),str(up_taxo_lin),str(up_taxo_id),str(up_cross_db_ref),binner, min_contig_len, k_mer_len, marker))
 
 
-        cur.execute('UPDATE projects SET project_name=%s, author=%s, description=%s, database_dir=%s, threads=%s, sequencing=%s, quality_scores=%s, output_lvl=%s, data_type=%s, assembler=%s, memory=%s, k_mer_sizes=%s, m=%s, alignment_method=%s, alignment_options=%s, train=%s, up_names_tax=%s, up_sequences=%s, up_function=%s, up_miscellaneous=%s, up_interaction=%s, up_expression=%s, up_gene_ont=%s, up_chebi=%s, up_path_biot=%s, up_cell_loc=%s, up_ptm=%s, up_structure=%s, up_pubs=%s, up_date=%s, up_family=%s, up_taxo_lin=%s, up_taxo_id=%s, up_cross_db_ref=%s, binner=%s, min_contig_len=%s, k_mer_len=%s, marker=%s WHERE id=%s',(	project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options,train,up_names_tax[0],up_sequences,up_function,up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner,min_contig_len,k_mer_len,marker))
+        cur.execute('UPDATE projects SET project_name=%s, author=%s, description=%s, database_dir=%s, threads=%s, sequencing=%s, quality_scores=%s, output_lvl=%s, data_type=%s, preprocessing=%s, assembly=%s, binning=%s,  assembler=%s, memory=%s, k_mer_sizes=%s, m=%s, alignment_method=%s, alignment_options=%s, train=%s, up_names_tax=%s, up_sequences=%s, up_function=%s, up_miscellaneous=%s, up_interaction=%s, up_expression=%s, up_gene_ont=%s, up_chebi=%s, up_path_biot=%s, up_cell_loc=%s, up_ptm=%s, up_structure=%s, up_pubs=%s, up_date=%s, up_family=%s, up_taxo_lin=%s, up_taxo_id=%s, up_cross_db_ref=%s, binner=%s, min_contig_len=%s, k_mer_len=%s, marker=%s WHERE id=%s',(	project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing,assembly,binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options,train,up_names_tax,up_sequences,up_function,up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner,min_contig_len,k_mer_len,marker))
         #commit to db
         mysql.connection.commit()
         #close connection
@@ -887,21 +892,16 @@ def run_mosca(id):
     for i in n:
         tag_n += i[0]
     name = project['project_name']+'_'+tag_n+'_'+str(project['date']).split(' ')[0]
-    #print(name)
-
-
 
     fetch = fetch_samples(id)
+
     if len(fetch) == 0:
         flash('Data needs to be added 1st' , 'danger')
         return redirect(url_for('dashboard'))
     samples_id = ''
     for row in fetch_samples(id):
-        #print(row)
         samples.append(row)
         samples_id = '_'.join(map(str,str(row['s_id'])))
-
-        #print(row['samples_name'])
 
         opt = 'Samples name: {} | Samples Condition: {} | Metagenomics Samples: {}; {} | Metatranscriptomics Samples {} {} '.format(str(row['samples_name']),str(row['samples_condition']),str(row['mg_sample1']),str(row['mg_sample2']),str(row['mt_sample1']),str(row['mt_sample2']))
         form.samples_list.choices.append((str(row),row['samples_name']))
@@ -913,8 +913,6 @@ def run_mosca(id):
                 flash('You need to select a sample' , 'danger')
                 return redirect(request.url)
             samples2 = form.samples_list.data
-            #print(samples2)
-            #print(len(samples2))
 
             #execute
 
@@ -930,14 +928,12 @@ def run_mosca(id):
             flash('Mosca is running' , 'success')
             name = name + '_' + samples_id
             exe_mosca=start_run(id,name,samples_id)
-
-            #exe_mosca = start_run(id,name,samples_id)
             ### definir função para dar trigger no inicio da mosca
             return redirect(url_for('exe_mosca_pipe', id = id, name = name, samples_id=samples_id,exe_mosca=exe_mosca))
 
     cur.execute('DELETE FROM exe_projects')
     cur.execute('ALTER TABLE exe_projects AUTO_INCREMENT = 1')
-        #pipe_samples = form.samples_list.choices
+
     #commit to db
     mysql.connection.commit()
     #close connection
@@ -964,25 +960,14 @@ def get_shell_script_output_using_check_output():
 def create_project_directory(dir):
     subprocess.Popen(['mkdir',dir])
 
-def subprocess_with_exp(expression):
-    print(expression)
-    print(expression.split('\t'))
-    session = subprocess.Popen(expression.split('\t'), stdout=PIPE, stderr=PIPE)
-    stdout, stderr = session.communicate()
-    #print(stdout.decode('utf-8'))
-    #if stderr:
-        #return str(Exception("Error "+str(stderr)))
-        #raise Exception("Error "+str(stderr))
-    return stdout.decode('utf-8')
-
-
-
 #PIPELINE EXECUTION + MONITORING
 @app.route('/exe_mosca_pipe/<path:id>/<path:name>/<path:samples_id>/<path:exe_mosca>', methods = ['GET', 'POST'])
 @is_logged_in
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     global state
-    output = open('file.txt','r')
+    #output = open('file.txt','r')
+    output = open('static/{}/monitorization_report.txt','r')
+    print(output)
     steps = []
     report_out = []
     bin_ab = [[],[]]
@@ -990,85 +975,50 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     f_files = []
     if state == 'True':
         state = 'False'
-        print('\n'+state+'\n')
 
         return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
 
-        print('\n'+state+'\n')
-
     elif state == 'False':
         state = 'Pass'
-        print('\n'+state+'\n')
 
-        get_shell_script_output_using_communicate()
-
+        subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check = True)
 
     else:
-        print('\n'+state+'\n')
-
         for line in output:
-            print(line)
+            #print(line)
             steps.append(line.rstrip('\n'))
             if 'assembly' in line :
                 report = open('static/{}/Assembly/quality_control/report.tsv'.format(name), 'r')
                 for l in report:
                     report_out.append(l.rstrip('\n'))
 
-
-
-
             if 'binning' in line:
-                #bin_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Binning')
 
                 bin_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Binning/markerset*'.format(name))
-                #static/Binning/markerset40.summary'abundance
-                print(bin_files)
                 for i in range(len(bin_files)):
                     if bin_files[i] != 'None' :
                         if 'abundance' in bin_files[i] :
                             f = open('static'+ bin_files[i].split('static')[1],'r')
-                            #f = pd.read_csv(bin_files[i][0][34])
-                            print(f)
-
                             bin_ab[0].append(bin_files[i][-36:].split('/')[-1])
                             for l in f:
-
                                 bin_ab[1].append(l.rstrip('\n'))
                         else:
                             f = open('static'+ bin_files[i].split('static')[1],'r')
                             bin_sum[0].append(bin_files[i][-34:].split('/')[-1])
                             for l in f:
-
                                 bin_sum[1].append(l.rstrip('\n'))
-                        #f = open()
-                print(bin_ab)
-                print(bin_sum)
-
-
-
-
-
 
             if 'preprocessing' in line:
-                #pre_files = get_filelist(os.path.join(app.instance_path)[0:-8]+'static/Preprocess/FastQC')
                 pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html'.format(name))
 
                 for file in pre_files:
-                    #print(file.split('static')[1])
-
                     f_files.append('/static'+file.split('static')[1])
-
-
-                print('hi',pre_files)
-                print(f_files)
                 state = 'True'
-
-        print('HI\n',report_out)
-        print(os.path.join(app.instance_path)[0:-8])
 
         return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
 
-###############################################################
+
+#####################################################################################################################################################
 @app.route('/annotation/taxonomy/<path:name>', methods = ['GET', 'POST'])
 def krona1(name):
     return send_file('static/{}/Annotation/mg_taxonomy.html'.format(name))
@@ -1096,7 +1046,6 @@ def start_run(id, name, samples_id):
 
     for i in range(len(samples)):
         sample = ast.literal_eval(samples[i]['samples'])
-        #print(sample)
         if i >=1:
             file_exp += ' '
         if sample['mg_sample1'] and sample['mg_sample2'] and sample['mt_sample1'] and sample['mt_sample2']:
@@ -1117,7 +1066,7 @@ def start_run(id, name, samples_id):
     exe_try = 'python MOSCA/scripts/mosca.py --files\t{}\t'.format(file_exp)
     exe_mosca = 'python MOSCA/scripts/mosca.py --files\t{}\t'.format(file_exp)
 
-    print(project)
+    #print(project)
     if project['sequencing']=='PE':
         st_exp = '--sequencing-technology\tpaired'
     if project['sequencing']=='SE':
@@ -1140,6 +1089,7 @@ def start_run(id, name, samples_id):
     outlvl_exp = '--output-level\t{}'.format(project['output_lvl'])
 
     tod_exp = '--type-of-data\t{}'.format(project['data_type'])
+
     #if sample['mg_sample1'] and not sample['mt_sample1']:
     #    tod_exp = '--type-of-data\tmetagenomics'
     #if sample['mt_sample1'] and not sample['mg_sample1']:
@@ -1150,13 +1100,12 @@ def start_run(id, name, samples_id):
     dict_s = []
     for i in samples:
         dict_s.append(literal_eval(i['samples']))
-    #print(dict_s)
 
     res = []
     for s in dict_s:
         res.append(s['samples_condition'])
     scond_exp=','.join(res)
-    #print(scond_exp)
+
     scond_exp='--conditions\t'+scond_exp
 
     thr_exp = '--threads\t{}'.format(project['threads'])
@@ -1168,33 +1117,35 @@ def start_run(id, name, samples_id):
 
     gene_set_exp = '--marker-gene-set\t{}'.format(project['marker'].rstrip(' '))
 
-    #exe_mosca = 'python MOSCA/scripts/mosca.py\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
-    mosca_exe = 'MOSCA/scripts/mosca.py'
-    #mosca_exe = '/mnt/HDDStorage/jsequeira/MOSCA/scripts/mosca.py'
+    uniprot_data = [project['up_names_tax'],project['up_sequences'], project['up_function'],project['up_miscellaneous'],project['up_interaction'],project['up_expression'],project['up_gene_ont'],project['up_chebi'], project['up_path_biot'], project['up_cell_loc'], project['up_ptm'], project['up_structure'], project['up_pubs'], project['up_date'],project['up_family'],project['up_taxo_lin'],project['up_taxo_id']]
 
-    exe_mosca = 'python\t{}\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(mosca_exe,file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp)
+    ann_col_exp = '--annotation-columns\t'
+    columns= ''
+    for column in uniprot_data:
+        column = ast.literal_eval(column)
+        if column !=  []:
+            if columns:
+                columns += ','
+            columns += ','.join(column)
+    ann_col_exp+= columns
+    print(ann_col_exp+columns)
+
+    ann_dbs_exp = '--annotation-databases\t'
+    ann_opt = ''
+    ann_dbs_options = ast.literal_eval(project['up_cross_db_ref'])
+    ann_opt = ','.join(ann_dbs_options)
+    ann_dbs_exp += ann_opt
+    print(ann_dbs_exp)
+
+    mosca_exe = 'MOSCA/scripts/mosca.py'
+
+    exe_mosca = 'python\t{}\t--files\t{}\t{}\t{}\t{}\t{}{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(mosca_exe,file_exp,st_exp,ass_exp,db_exp,out_exp,no_exp,outlvl_exp,tod_exp,scond_exp,thr_exp,memory_exp,gene_set_exp,ann_col_exp,ann_dbs_exp)
     #subprocess.run(exe_mosca.split('\t'), stdout=PIPE, check = True)
 
-    #exe_mosca = 'python MOSCA/scripts/mosca.py --files {} --output-dir output_directory'.format(file_exp)
     file = open('execute_mosca2.sh','w')
     file.write('#!/bin/sh'+'\n')
-    #file.write('chmod -x execute_mosca2.sh'+'\n')
-    #ile.write('echo ' + "'{}'".format(exe_mosca))
     file.write("{}".format(exe_mosca))
-    #file.write("{}".format(exe_try))
     file.close()
-
-
-    #print(exe_mosca)
-
-    #exe_mosca = get_shell_script_output_using_check_output()
-    #exe_mosca = get_shell_script_output_using_communicate()
-    #print(exe_mosca)
-    #print(background_process())
-    #get_shell_script_output_using_communicate()
-    #print(os.path.join(app.instance_path))
-    #get_shell_script_output_using_communicate()
-    #subprocess_with_exp(exe_mosca)
 
     return exe_mosca
 
