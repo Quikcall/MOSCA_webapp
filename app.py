@@ -689,25 +689,26 @@ def edit_article(id):
     form.alignment_method.data = project['alignment_method']
     form.alignment_options.data = project['alignment_options']
     #form.train_dir.data = project['train_dir']
-    form.train.data = project['train']
-    form.up_names_tax.data = project['up_names_tax']
-    form.up_sequences.data = project['up_sequences']
-    form.up_function.data = project['up_function']
-    form.up_miscellaneous.data = project['up_miscellaneous']
-    form.up_interaction.data = project['up_interaction']
-    form.up_expression.data = project['up_expression']
-    form.up_gene_ont.data = project['up_gene_ont']
-    form.up_chebi.data = project['up_chebi']
-    form.up_path_biot.data = project['up_path_biot']
-    form.up_cell_loc.data = project['up_cell_loc']
-    form.up_ptm.data = project['up_ptm']
-    form.up_structure.data = project['up_structure']
-    form.up_pubs.data = project['up_pubs']
-    form.up_date.data = project['up_date']
-    form.up_family.data = project['up_family']
-    form.up_taxo_lin.data = project['up_taxo_lin']
-    form.up_taxo_id.data = project['up_taxo_id']
-    form.up_cross_db_ref.data = project['up_cross_db_ref']
+    form.up_names_tax.data = ast.literal_eval(project['up_names_tax'])
+    form.up_sequences.data = ast.literal_eval(project['up_sequences'])
+    form.up_function.data = ast.literal_eval(project['up_function'])
+    form.up_miscellaneous.data = ast.literal_eval(project['up_miscellaneous'])
+    form.up_interaction.data = ast.literal_eval(project['up_interaction'])
+    form.up_expression.data = ast.literal_eval(project['up_expression'])
+    form.up_gene_ont.data = ast.literal_eval(project['up_gene_ont'])
+    form.up_chebi.data = ast.literal_eval(project['up_chebi'])
+    form.up_path_biot.data = ast.literal_eval(project['up_path_biot'])
+    form.up_cell_loc.data = ast.literal_eval(project['up_cell_loc'])
+    form.up_ptm.data = ast.literal_eval(project['up_ptm'])
+    form.up_structure.data = ast.literal_eval(project['up_structure'])
+    form.up_pubs.data = ast.literal_eval(project['up_pubs'])
+    form.up_date.data = ast.literal_eval(project['up_date'])
+    form.up_family.data = ast.literal_eval(project['up_family'])
+    form.up_taxo_lin.data = ast.literal_eval(project['up_taxo_lin'])
+    form.up_taxo_id.data = ast.literal_eval(project['up_taxo_id'])
+    form.up_cross_db_ref.data = ast.literal_eval(project['up_cross_db_ref'])
+
+
     form.binner.data = project['binner']
     form.min_contig_len.data = project['min_contig_len']
     form.k_mer_len.data = project['k_mer_len']
@@ -751,6 +752,7 @@ def edit_article(id):
         train = request.form['train']
 
         #UniProt
+        '''
         up_names_tax = request.form['up_names_tax']
         up_sequences = request.form.get['up_sequences']
         up_function = request.form.get['up_function']
@@ -769,7 +771,7 @@ def edit_article(id):
         up_taxo_lin = request.form['up_taxo_lin']
         up_taxo_id = request.form['up_taxo_id']
         up_cross_db_ref = request.form['up_cross_db_ref']
-
+        '''
         #VizBin
         binner = request.form['binner']
         min_contig_len = request.form['min_contig_len']
@@ -783,7 +785,10 @@ def edit_article(id):
             alignment_options = alignment_options + '-local'
 
 
-        cur.execute('UPDATE projects SET project_name=%s, author=%s, description=%s, database_dir=%s, threads=%s, sequencing=%s, quality_scores=%s, output_lvl=%s, data_type=%s, preprocessing=%s, assembly=%s, binning=%s,  assembler=%s, memory=%s, k_mer_sizes=%s, m=%s, alignment_method=%s, alignment_options=%s, train=%s, up_names_tax=%s, up_sequences=%s, up_function=%s, up_miscellaneous=%s, up_interaction=%s, up_expression=%s, up_gene_ont=%s, up_chebi=%s, up_path_biot=%s, up_cell_loc=%s, up_ptm=%s, up_structure=%s, up_pubs=%s, up_date=%s, up_family=%s, up_taxo_lin=%s, up_taxo_id=%s, up_cross_db_ref=%s, binner=%s, min_contig_len=%s, k_mer_len=%s, marker=%s WHERE id=%s',(	project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing,assembly,binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options,train,up_names_tax,up_sequences,up_function,up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner,min_contig_len,k_mer_len,marker))
+
+        cur.execute('UPDATE projects SET project_name=%s, author=%s, description=%s, database_dir=%s, threads=%s, sequencing=%s, quality_scores=%s, output_lvl=%s, data_type=%s, preprocessing=%s, assembly=%s, binning=%s,  assembler=%s, memory=%s, k_mer_sizes=%s, m=%s, alignment_method=%s, alignment_options=%s, train=%s, binner=%s, min_contig_len=%s, k_mer_len=%s, marker=%s WHERE id=%s',(	project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing,assembly,binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options,train,binner,min_contig_len,k_mer_len,marker,id))
+
+
         #commit to db
         mysql.connection.commit()
         #close connection
@@ -934,12 +939,12 @@ def get_shell_script_output_using_communicate():
     #subprocess.Popen(['chmod','-x','execute_mosca2'])
     session = subprocess.Popen(['./execute_mosca2.sh'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = session.communicate()
-    print(stdout.decode('utf-8'))
+    #print(stdout.decode('utf-8'))
     #if stderr:
         #print(str(Exception("Error "+str(stderr))))
         #raise Exception("Error "+str(stderr))
 
-    #return stdout.decode('utf-8')
+    return stdout.decode('utf-8')
 
 def get_shell_script_output_using_check_output():
     stdout = check_output(['./execute_mosca2.sh']).decode('utf-8')
@@ -972,10 +977,11 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
     elif state == 'False':
         state = 'Pass'
+        #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
+        subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT)
 
-        subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check = True)
         #get_shell_script_output_using_communicate()
-    else:
+    elif state == 'Pass':
         for line in output:
             #print(line)
             steps.append(line.rstrip('\n'))
@@ -1005,9 +1011,11 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
                 for file in pre_files:
                     f_files.append('/static'+file.split('static')[1])
-                state = 'True'
+            if 'expression' in line:
+                #state = 'True'
+                break
 
-        return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
+    return render_template('exe_mosca_pipe.html', id=id, name = name, samples_id=samples_id, exe_mosca=exe_mosca, steps=steps, report_out=report_out, f_files=f_files, bin_ab=bin_ab,bin_sum=bin_sum,state=state)
 
 
 #####################################################################################################################################################
@@ -1025,9 +1033,9 @@ def start_run(id, name, samples_id):
     global state
     state = 'True'
 
-
-    create_project_directory('static/{}'.format(name))
-    create_monitor_file('static/{}'.format(name))
+    if not os.path.exists('static/{}'.format(name)):
+        create_project_directory('static/{}'.format(name))
+        create_monitor_file('static/{}'.format(name))
 
 
     cur = mysql.connection.cursor()
