@@ -187,11 +187,12 @@ padding: 0 0 0 15px;
 <body>
 
 
+
 {% if steps == [] %}
 <script type="text/javascript">
 setTimeout(function() {
-  location.reload();
-}, 30000);
+  location.reload(true);
+}, 300000);
 </script>
 
 <div class="container">
@@ -282,7 +283,7 @@ setTimeout(function() {
 <script type="text/javascript">
 setTimeout(function() {
   location.reload();
-}, 30000);
+}, 300000);
 </script>
 
 <div class="container">
@@ -390,7 +391,7 @@ setTimeout(function() {
  <script type="text/javascript">
  setTimeout(function() {
    location.reload();
- }, 30000);
+ }, 300000);
  </script>
  <div class="container">
 
@@ -505,7 +506,7 @@ setTimeout(function() {
  <script type="text/javascript">
  setTimeout(function() {
    location.reload();
- }, 30000);
+ }, 300000);
  </script>
  <div class="container">
 
@@ -629,7 +630,7 @@ setTimeout(function() {
   <script type="text/javascript">
   setTimeout(function() {
     location.reload();
-  }, 30000);
+  }, 300000);
   </script>
   <div class="container">
 
@@ -1099,15 +1100,15 @@ setTimeout(function() {
             </div>
   {% endif %}
 
-	</div>
-	</div>
-  {% if state != 'Pass' %}
+					</div>
+				</div>
+
+        {% if state != 'True' %}
           <script type="text/javascript">
           setTimeout(function() {
             location.reload(true);
           }, 0);
           </script>
         {% endif %}
-
 </div>
 {% endblock %}
