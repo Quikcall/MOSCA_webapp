@@ -1,0 +1,17 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+}
+th,
+td {
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  overflow-x: scroll;
+  text-overflow: ellipsis;
+}
+th:hover,
+td:hover {
+  text-overflow: clip;
+}
