@@ -191,7 +191,6 @@ def dashboard():
     cur = mysql.connection.cursor()
 
     # Get articles
-    #result = cur.execute("SELECT * FROM articles")
     # Show articles only from the user logged in
     result = cur.execute("SELECT * FROM projects")
 
@@ -302,9 +301,6 @@ class ProjectForm(Form):
 
     database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
     #database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
-
-
-
     #database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
     database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
     #database_dir = StringField('rRNA database directory', [validators.Length(min=1,max=300)])
@@ -319,10 +315,6 @@ class ProjectForm(Form):
     preprocessing = BooleanField('Preprocessing',render_kw={'checked': True})
     assembly = BooleanField('Assembly',render_kw={'checked': True})
     binning = BooleanField('Binning',render_kw={'checked': True})
-
-    #preprocessing = SelectField('No preprocessing?',choices = [(True,'Yes'),(False,'No')])
-    #assembly = SelectField('No assembly?',choices = [(True,'Yes'),(False,'No')])
-    #binning = SelectField('No binning?',choices = [(True,'Yes'),(False,'No')])
 
     #ASSEMBLY
     assembler = SelectField('Assembler', choices = [('metaSPAdes','metaSPAdes'),('MEGAHIT','MEGAHIT')])
@@ -790,10 +782,6 @@ def edit_article(id):
         if alignment_method == 'local':
             alignment_options = alignment_options + '-local'
 
-        #cur.execute('DELETE FROM projects WHERE id= %s',[id])
-
-        #cur.execute('INSERT INTO projects(project_name,author,description,database_dir,threads,sequencing,quality_scores, output_lvl, data_type, preprocessing, assembly, binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options, train, up_names_tax, up_sequences, up_function, up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner, min_contig_len, k_mer_len,marker) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing, assembly, binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options, train, str(up_names_tax), str(up_sequences), str(up_function), str(up_miscellaneous),str(up_interaction),str(up_expression),str(up_gene_ont),str(up_chebi),str(up_path_biot),str(up_cell_loc),str(up_ptm),str(up_structure),str(up_pubs),str(up_date),str(up_family),str(up_taxo_lin),str(up_taxo_id),str(up_cross_db_ref),binner, min_contig_len, k_mer_len, marker))
-
 
         cur.execute('UPDATE projects SET project_name=%s, author=%s, description=%s, database_dir=%s, threads=%s, sequencing=%s, quality_scores=%s, output_lvl=%s, data_type=%s, preprocessing=%s, assembly=%s, binning=%s,  assembler=%s, memory=%s, k_mer_sizes=%s, m=%s, alignment_method=%s, alignment_options=%s, train=%s, up_names_tax=%s, up_sequences=%s, up_function=%s, up_miscellaneous=%s, up_interaction=%s, up_expression=%s, up_gene_ont=%s, up_chebi=%s, up_path_biot=%s, up_cell_loc=%s, up_ptm=%s, up_structure=%s, up_pubs=%s, up_date=%s, up_family=%s, up_taxo_lin=%s, up_taxo_id=%s, up_cross_db_ref=%s, binner=%s, min_contig_len=%s, k_mer_len=%s, marker=%s WHERE id=%s',(	project_name,author,description,database_dir,threads,sequencing,quality_scores,output_lvl,data_type,preprocessing,assembly,binning,assembler,memory,k_mer_sizes,m,alignment_method,alignment_options,train,up_names_tax,up_sequences,up_function,up_miscellaneous,up_interaction,up_expression,up_gene_ont,up_chebi,up_path_biot,up_cell_loc,up_ptm,up_structure,up_pubs,up_date,up_family,up_taxo_lin,up_taxo_id,up_cross_db_ref,binner,min_contig_len,k_mer_len,marker))
         #commit to db
@@ -960,13 +948,17 @@ def get_shell_script_output_using_check_output():
 def create_project_directory(dir):
     subprocess.Popen(['mkdir',dir])
 
+def create_monitor_file(dir):
+    subprocess.Popen(['touch','{}/monitorization_report.txt'.format(dir)])
+
 #PIPELINE EXECUTION + MONITORING
 @app.route('/exe_mosca_pipe/<path:id>/<path:name>/<path:samples_id>/<path:exe_mosca>', methods = ['GET', 'POST'])
 @is_logged_in
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     global state
     #output = open('file.txt','r')
-    output = open('static/{}/monitorization_report.txt','r')
+    output = open('static/{}/monitorization_report.txt'.format(name),'r')
+
     print(output)
     steps = []
     report_out = []
@@ -982,7 +974,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
         state = 'Pass'
 
         subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check = True)
-
+        #get_shell_script_output_using_communicate()
     else:
         for line in output:
             #print(line)
@@ -1035,6 +1027,8 @@ def start_run(id, name, samples_id):
 
 
     create_project_directory('static/{}'.format(name))
+    create_monitor_file('static/{}'.format(name))
+
 
     cur = mysql.connection.cursor()
     project = cur.execute("SELECT * FROM projects WHERE id=%s",[id])
