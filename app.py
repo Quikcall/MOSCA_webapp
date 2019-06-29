@@ -977,12 +977,12 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
     elif state == 'False':
         state = 'Pass'
-        
-        subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
+        continue
+        #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
         #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT)
 
         #get_shell_script_output_using_communicate()
-    elif state == 'Pass':
+    else:
         for line in output:
             #print(line)
             steps.append(line.rstrip('\n'))
