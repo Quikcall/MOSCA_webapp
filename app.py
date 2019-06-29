@@ -962,7 +962,7 @@ def create_monitor_file(dir):
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     global state
     #output = open('file.txt','r')
-    output = open('{}static/{}/monitorization_report.txt'.format(os.path.join(app.instance_path)[0:-8],name),'r')
+    output = open('static/{}/monitorization_report.txt'.format(name),'r')
 
     print(output)
     steps = []
@@ -977,12 +977,11 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
     elif state == 'False':
         state = 'Pass'
-        pass
-        #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
+        subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
         #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT)
 
         #get_shell_script_output_using_communicate()
-    else:
+    elif state == 'Pass':
         for line in output:
             #print(line)
             steps.append(line.rstrip('\n'))
@@ -1009,6 +1008,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
             if 'preprocessing' in line:
                 pre_files = glob.glob(os.path.join(app.instance_path)[0:-8]+'static/{}/Preprocess/FastQC/quality_trimmed_*_paired_fastqc.html'.format(name))
+                print(pre_files)
 
                 for file in pre_files:
                     f_files.append('/static'+file.split('static')[1])
