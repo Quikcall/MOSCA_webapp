@@ -962,7 +962,7 @@ def create_monitor_file(dir):
 def exe_mosca_pipe(id, name, samples_id,exe_mosca):
     global state
     #output = open('file.txt','r')
-    output = open('static/{}/monitorization_report.txt'.format(name),'r')
+    output = open('{}static/{}/monitorization_report.txt'.format(os.path.join(app.instance_path)[0:-8],name),'r')
 
     print(output)
     steps = []
