@@ -299,10 +299,10 @@ class ProjectForm(Form):
     for i in directories:
         drop_out_dir.append((i,i))
 
-    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/databases')
+    database_options = get_filelist2(os.path.join(app.instance_path)[0:-8]+'MOSCA/Databases/annotation_databases')
     #database_options = get_filelist2('/mnt/HDDSstorage/jsequeira/MOSCA/Databases/annotation_databases') ###path in server
-    #database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
-    database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
+    database_dir = SelectField('Database file for Annotation', choices = database_options[::-1], default = database_options[0][1])
+    #database_dir = SelectField('Database file for Annotation ', default=[('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta')],choices = [('/mosca/Databases/annotation_databases/uniprot.fasta','uniprot.fasta'),('/mosca/Databases/annotation_databases/ncbi.fasta','ncbi.fasta')])
     #database_dir = StringField('rRNA database directory', [validators.Length(min=1,max=300)])
 
     threads = IntegerField('Number of Threads', default=4)
