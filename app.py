@@ -977,7 +977,7 @@ def exe_mosca_pipe(id, name, samples_id,exe_mosca):
 
     elif state == 'False':
         state = 'Pass'
-        continue
+        pass
         #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT, check=True)
         #subprocess.run(exe_mosca.split('\t'), stderr=subprocess.STDOUT)
 
